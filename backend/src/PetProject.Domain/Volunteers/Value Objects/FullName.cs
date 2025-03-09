@@ -4,23 +4,42 @@ namespace PetProject.Domain.Volunteers;
 
 public record FullName
 {
-    public string FirstName { get; }
-    public string LastName { get; }
+    private const int MAXNAMELENGTH = 50;
+    public string Name { get; }
+    public string Surname { get; }
+    public string Patronymic { get; }
+    
 
-    private FullName(string firstName, string lastName)
+    private FullName(string name, string surname, string patronymic)
     {
-        FirstName = firstName;
-        LastName = lastName;
+        Name = name;
+        Surname = surname;
+        Patronymic = patronymic;
     }
 
-    public static Result Create(string firstName, string lastName)
+    public static Result Create(string name, string surname, string patronymic)
     {
-        if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
-        {
-            return Result.Failure("First and last name are required");
-        }
-        var fullName = new FullName(firstName, lastName);
-        return Result.Success(firstName);
+        if (string.IsNullOrWhiteSpace(name))
+            return Result.Failure("Name is required");
+        
+        if (name.Length > MAXNAMELENGTH)
+            return Result.Failure($"Name cannot be more than {MAXNAMELENGTH} characters");
+        
+        if (string.IsNullOrWhiteSpace(surname))
+            return Result.Failure("Surname is required");
+        
+        if (surname.Length > MAXNAMELENGTH)
+            return Result.Failure($"Surname cannot be more than {MAXNAMELENGTH} characters");
+        
+        if (string.IsNullOrWhiteSpace(patronymic))
+            return Result.Failure("Patronymic is required");
+        
+        if (patronymic.Length > MAXNAMELENGTH)
+            return Result.Failure($"Patronymic cannot be more than {MAXNAMELENGTH} characters");
+        
+        
+        var fullName = new FullName(name, surname, patronymic);
+        return Result.Success(fullName);
     }
     
     

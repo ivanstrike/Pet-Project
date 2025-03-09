@@ -7,7 +7,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     // for ef
     private Volunteer(VolunteerId volunteerId) : base(volunteerId) {}
 
-    private Volunteer(
+    public Volunteer(
         VolunteerId volunteerId,
         FullName fullname,
         Email email,
@@ -28,8 +28,6 @@ public class Volunteer : Shared.Entity<VolunteerId>
         Requisites = requisites;
         Pets = pets;
     }
-    
-    public VolunteerId Id { get; private set; }
     public FullName FullName { get; private set; } = default!;
     public Email Email { get; private set; } = default!;
     public string Description { get; private set; } = default!;
@@ -43,7 +41,6 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsOnTreatment() => Pets.Count(x => x.Status.Value == "OnTreatment");
    
     public static Result Create(
-        VolunteerId volunteerId,
         FullName fullname,
         string description,
         float experience,
@@ -52,6 +49,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
         List<Requisites> requisites,
         List<Pet> pets)
     {
+        var volunteerId = VolunteerId.NewPetId();
         var volonteer = new Volunteer(
             volunteerId,
             fullname,

@@ -7,17 +7,17 @@ public class Pet : Shared.Entity<PetId>
     //for ef
     private Pet(PetId id) : base(id){}
 
-    private Pet(
+    public Pet(
         PetId petId,
         string name,
         string description,
         SpeciesId speciesId,
         BreedId breedId,
-        Colour colour,
+        Color color,
         string healthInformation,
         Address address,
         Size size,
-        string ownerPhone,
+        OwnerPhone ownerPhone,
         bool isNeutered,
         DateOnly birthDate,
         bool isVaccinated,
@@ -30,7 +30,7 @@ public class Pet : Shared.Entity<PetId>
         Description = description;
         SpeciesId = speciesId;
         BreedId = breedId;
-        Colour = colour;
+        Color = color;
         HealthInformation = healthInformation;
         Address = address;
         Size = size;
@@ -44,8 +44,6 @@ public class Pet : Shared.Entity<PetId>
         
     }
         
-    public PetId Id { get; private set; } 
-    
     public string Name { get; private set; } = default!;
     
     public string Description { get; private set; } = default!;
@@ -54,7 +52,7 @@ public class Pet : Shared.Entity<PetId>
     
     public BreedId BreedId { get; private set; } = default!;
     
-    public Colour Colour { get; private set; } = default!;
+    public Color Color { get; private set; } = default!;
     
     public string HealthInformation { get; private set; } = default!;
     
@@ -62,7 +60,7 @@ public class Pet : Shared.Entity<PetId>
     
     public Size Size { get; private set; }  = default!;
     
-    public string OwnerPhone { get; private set; } = default!;
+    public OwnerPhone OwnerPhone { get; private set; } = default!;
     
     public bool IsNeutered { get; private set; } = default!;
 
@@ -77,16 +75,15 @@ public class Pet : Shared.Entity<PetId>
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
     public static Result Create(
-        PetId petId,
         string name,
         string description,
         SpeciesId speciesId,
         BreedId breedId,
-        Colour colour,
+        Color color,
         string healthInformation,
         Address address,
         Size size,
-        string ownerPhone,
+        OwnerPhone ownerPhone,
         bool isNeutered,
         DateOnly birthDate,
         bool isVaccinated,
@@ -104,12 +101,12 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure("Description is required.");
         }
         var pet = new Pet(
-            petId,
+            PetId.NewPetId(),
             name, 
             description, 
             speciesId, 
             breedId, 
-            colour, 
+            color, 
             healthInformation, 
             address, 
             size,  
@@ -123,4 +120,4 @@ public class Pet : Shared.Entity<PetId>
         return Result.Success(pet);
     }
     
-    }
+}

@@ -2,11 +2,11 @@
 
 namespace PetProject.Domain;
 
-public record Colour
+public record Color
 {
     public string Value { get;}
 
-    private Colour(string value)
+    private Color(string value)
     {
         Value = value;
     }
@@ -18,7 +18,7 @@ public record Colour
             return Result.Failure("Required fields are missing.");
         }
         
-        var colour = new Colour(value);
-        return Result.Success(colour);
+        var color = new Color(value);
+        return Result.Success(color);
     }
 }
