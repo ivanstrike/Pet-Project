@@ -1,15 +1,18 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Species;
 
 namespace PetProject.Domain;
 
 public class Pet : Shared.Entity<PetId>
 {
+    private readonly List<Requisites> _requisites = [];
     //for ef
+    private Pet() : base(PetId.Empty()){}
     private Pet(PetId id) : base(id){}
 
     public Pet(
         PetId petId,
-        string name,
+        Name name,
         string description,
         SpeciesId speciesId,
         BreedId breedId,
@@ -22,7 +25,7 @@ public class Pet : Shared.Entity<PetId>
         DateOnly birthDate,
         bool isVaccinated,
         Status helpStatus,
-        Requisites requisites
+        List<Requisites> requisites
         )
     :base(petId)
     {
@@ -39,12 +42,12 @@ public class Pet : Shared.Entity<PetId>
         BirthDate = birthDate;
         IsVaccinated = isVaccinated;
         Status = helpStatus;
-        Requisites = requisites;
+        _requisites = requisites;
         CreatedAt = DateTime.UtcNow;
         
     }
         
-    public string Name { get; private set; } = default!;
+    public Name Name { get; private set; } = default!;
     
     public string Description { get; private set; } = default!;
     
@@ -70,12 +73,12 @@ public class Pet : Shared.Entity<PetId>
     
     public Status Status { get; private set; } = default!;
     
-    public Requisites Requisites { get; private set; } = default!;
+    public IReadOnlyList<Requisites> Requisites => _requisites;
     
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
     public static Result Create(
-        string name,
+        Name name,
         string description,
         SpeciesId speciesId,
         BreedId breedId,
@@ -88,14 +91,9 @@ public class Pet : Shared.Entity<PetId>
         DateOnly birthDate,
         bool isVaccinated,
         Status helpStatus,
-        Requisites requisites
+        List<Requisites> requisites
         )
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return Result.Failure("Name is required.");
-        }
-
         if (string.IsNullOrWhiteSpace(description))
         {
             return Result.Failure("Description is required.");

@@ -4,10 +4,10 @@ namespace PetProject.Domain;
 
 public struct Address
 {
-    private string Country { get; }
-    private string City { get; }
-    private string Street { get; }
-    private string HouseNumber { get; }
+    public string Country { get; }
+    public string City { get; }
+    public string Street { get; }
+    public string HouseNumber { get; }
 
     private Address(string country, string city, string street, string houseNumber)
     {

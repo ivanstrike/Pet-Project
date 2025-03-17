@@ -4,23 +4,22 @@ namespace PetProject.Domain.Species;
 
 public class Species : Shared.Entity<SpeciesId>
 {
+    private readonly List<Breed> _breeds = [];
     // for ef
+    private Species() : base(SpeciesId.Empty()) {}
     private Species(SpeciesId speciesId) : base(speciesId) {}
     
-    public Species(SpeciesId speciesId, string name, List<Breed> breeds)
+    public Species(SpeciesId speciesId, Name name, List<Breed> breeds)
     :base(speciesId)
     {
         Name = name;
-        Breeds = breeds;
+        _breeds = breeds;
     }
-    public string Name { get; private set; } = string.Empty;
-    public List<Breed> Breeds { get; private set; } = [];
+    public Name Name { get; private set; } = default!;
+    public IReadOnlyList<Breed> Breeds => _breeds;
     
-    public static Result Create(string name, List<Breed> breeds)
+    public static Result Create(Name name, List<Breed> breeds)
     {
-        if (string.IsNullOrWhiteSpace(name)) 
-            return Result.Failure("Name cannot be null or whitespace.");
-
         var speciesId = SpeciesId.NewSpeciesId();
         var species = new Species(speciesId, name, breeds);
         return Result.Success(species);
