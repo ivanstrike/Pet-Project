@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain;
 
@@ -13,14 +14,13 @@ public record Requisites
         Description = description;
     }
 
-    public static Result Create(string name, string description)
+    public static Result<Requisites, Error> Create(string name, string description)
     {
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
         {
-            return Result.Failure("Required fields are missing.");
+            return Errors.General.ValueIsRequired("Requisites");
         }
         
-        var requisites = new Requisites(name, description);
-        return Result.Success(requisites);
+        return new Requisites(name, description);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain;
 
@@ -11,14 +12,17 @@ public record Status
         Value = value;
     }
 
-    public static Result Create(string value)
+    public static Result<Status, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value) )
         {
-            return Result.Failure("Status is missing.");
+            return Errors.General.ValueIsRequired("Status");
+        }
+        if (value.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("Status");
         }
         
-        var status = new Status(value);
-        return Result.Success(status);
+        return new Status(value);
     }
 }

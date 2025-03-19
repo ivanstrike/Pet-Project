@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 using PetProject.Domain.Species;
+using PetProject.Domain.Volunteers;
 
 namespace PetProject.Domain;
 
@@ -13,14 +15,14 @@ public class Pet : Shared.Entity<PetId>
     public Pet(
         PetId petId,
         Name name,
-        string description,
+        Description description,
         SpeciesId speciesId,
         BreedId breedId,
         Color color,
-        string healthInformation,
+        HealthInformation healthInformation,
         Address address,
         Size size,
-        OwnerPhone ownerPhone,
+        PhoneNumber ownerPhone,
         bool isNeutered,
         DateOnly birthDate,
         bool isVaccinated,
@@ -49,7 +51,7 @@ public class Pet : Shared.Entity<PetId>
         
     public Name Name { get; private set; } = default!;
     
-    public string Description { get; private set; } = default!;
+    public Description Description { get; private set; } = default!;
     
     public SpeciesId SpeciesId { get; private set; } = default!;
     
@@ -57,13 +59,13 @@ public class Pet : Shared.Entity<PetId>
     
     public Color Color { get; private set; } = default!;
     
-    public string HealthInformation { get; private set; } = default!;
+    public HealthInformation HealthInformation { get; private set; } = default!;
     
     public Address Address { get; private set; } = default!;
     
     public Size Size { get; private set; }  = default!;
     
-    public OwnerPhone OwnerPhone { get; private set; } = default!;
+    public PhoneNumber OwnerPhone { get; private set; } = default!;
     
     public bool IsNeutered { get; private set; } = default!;
 
@@ -77,16 +79,16 @@ public class Pet : Shared.Entity<PetId>
     
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
-    public static Result Create(
+    public static Result<Pet, Error> Create(
         Name name,
-        string description,
+        Description description,
         SpeciesId speciesId,
         BreedId breedId,
         Color color,
-        string healthInformation,
+        HealthInformation healthInformation,
         Address address,
         Size size,
-        OwnerPhone ownerPhone,
+        PhoneNumber ownerPhone,
         bool isNeutered,
         DateOnly birthDate,
         bool isVaccinated,
@@ -94,12 +96,10 @@ public class Pet : Shared.Entity<PetId>
         List<Requisites> requisites
         )
     {
-        if (string.IsNullOrWhiteSpace(description))
-        {
-            return Result.Failure("Description is required.");
-        }
+        
+        var petId = PetId.NewPetId();
         var pet = new Pet(
-            PetId.NewPetId(),
+            petId,
             name, 
             description, 
             speciesId, 
@@ -114,8 +114,8 @@ public class Pet : Shared.Entity<PetId>
             isVaccinated, 
             helpStatus, 
             requisites);
-        
-        return Result.Success(pet);
+
+        return pet;
     }
     
 }

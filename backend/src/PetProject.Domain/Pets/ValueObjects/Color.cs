@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain;
 
@@ -11,14 +12,17 @@ public record Color
         Value = value;
     }
 
-    public static Result Create(string value)
+    public static Result<Color, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure("Required fields are missing.");
+            return Errors.General.ValueIsRequired("Color");
+        }
+        if (value.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("Color");
         }
         
-        var color = new Color(value);
-        return Result.Success(color);
+        return new Color(value);
     }
 }

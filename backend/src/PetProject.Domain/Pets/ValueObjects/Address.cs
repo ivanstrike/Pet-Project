@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain;
 
@@ -17,15 +18,49 @@ public struct Address
         HouseNumber = houseNumber;
     }
 
-    public static Result Create(string country, string city, string street, string houseNumber)
+    public static Result<Address, Error> Create(string country, string city, string street, string houseNumber)
     {
-        if (string.IsNullOrWhiteSpace(country) || string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(street) || string.IsNullOrWhiteSpace(houseNumber))
+        if (string.IsNullOrWhiteSpace(country))
         {
-            return Result.Failure<Size>("Adresses are missing.");
+            return Errors.General.ValueIsRequired("Country");
         }
         
-        var address = new Address(country, city, street, houseNumber);
-        return Result.Success(address);
+        if (string.IsNullOrWhiteSpace(city))
+        {
+            return Errors.General.ValueIsRequired("City");
+        }
+        
+        if (string.IsNullOrWhiteSpace(street))
+        {
+            return Errors.General.ValueIsRequired("Street");
+        }
+        
+        if (string.IsNullOrWhiteSpace(houseNumber))
+        {
+            return Errors.General.ValueIsRequired("HouseNumber");
+        }
+        
+        if (country.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("Country");
+        }
+
+        if (city.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("City");
+        }
+
+        if (street.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("Street");
+        }
+
+        if (houseNumber.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("HouseNumber");
+}
+        
+        return new Address(country, city, street, houseNumber);
     }
     
 }

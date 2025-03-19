@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain;
 
 public record Size
 {
-    public const float MIN_VALUE = 0.0f;
     public float Height { get; }
     public float Weight { get; }
 
@@ -14,14 +14,19 @@ public record Size
         Weight = weight;
     }
 
-    public static Result<Size> Create(float height, float weight)
+    public static Result<Size, Error> Create(float height, float weight)
     {
-        if (weight <= MIN_VALUE || height <= MIN_VALUE)
+        if (weight <= Constants.MIN_VALUE)
         {
-            return Result.Failure<Size>("Breed size must be greater than zero");
+            return Errors.General.ValueIsInvalid("Weight");
         }
         
-        var size = new Size(height, weight);
-        return Result.Success(size);
+        if (height <= Constants.MIN_VALUE)
+        {
+            return Errors.General.ValueIsInvalid("Height");
+        }
+        
+        return new Size(height, weight);
+        
     }
 }

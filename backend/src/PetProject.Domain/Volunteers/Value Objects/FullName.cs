@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain.Volunteers;
 
@@ -17,29 +18,27 @@ public record FullName
         Patronymic = patronymic;
     }
 
-    public static Result Create(string name, string surname, string patronymic)
+    public static Result<FullName, Error> Create(string name, string surname, string patronymic)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return Result.Failure("Name is required");
-        
+            return Errors.General.ValueIsRequired("Name");
+    
         if (name.Length > MAXNAMELENGTH)
-            return Result.Failure($"Name cannot be more than {MAXNAMELENGTH} characters");
-        
+            return Errors.General.ValueIsInvalid("Name");
+    
         if (string.IsNullOrWhiteSpace(surname))
-            return Result.Failure("Surname is required");
-        
+            return Errors.General.ValueIsRequired("Surname");
+    
         if (surname.Length > MAXNAMELENGTH)
-            return Result.Failure($"Surname cannot be more than {MAXNAMELENGTH} characters");
-        
+            return Errors.General.ValueIsInvalid("Surname");
+    
         if (string.IsNullOrWhiteSpace(patronymic))
-            return Result.Failure("Patronymic is required");
-        
+            return Errors.General.ValueIsRequired("Patronymic");
+    
         if (patronymic.Length > MAXNAMELENGTH)
-            return Result.Failure($"Patronymic cannot be more than {MAXNAMELENGTH} characters");
-        
-        
-        var fullName = new FullName(name, surname, patronymic);
-        return Result.Success(fullName);
+            return Errors.General.ValueIsInvalid("Patronymic");
+    
+        return new FullName(name, surname, patronymic);
     }
     
     

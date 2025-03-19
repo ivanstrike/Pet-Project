@@ -28,11 +28,11 @@ namespace PetProject.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    experience = table.Column<float>(type: "real", nullable: false),
                     social_networks = table.Column<string>(type: "text", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    experience = table.Column<float>(type: "real", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -67,10 +67,8 @@ namespace PetProject.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    health_information = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     is_neutered = table.Column<bool>(type: "boolean", nullable: false),
                     birth_date = table.Column<DateOnly>(type: "date", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
@@ -82,6 +80,8 @@ namespace PetProject.Infrastructure.Migrations
                     house_number = table.Column<string>(type: "text", nullable: false),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    health_information = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     owner_phone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     height = table.Column<float>(type: "real", nullable: false),

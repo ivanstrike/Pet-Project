@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain.Volunteers;
 
@@ -10,14 +11,18 @@ public record Email
         Value = value;
     }
 
-    public static Result Create(string value)
+    public static Result<Email, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value) )
         {
-            return Result.Failure("Email is missing.");
+            return Errors.General.ValueIsRequired("Email");
         }
         
-        var email = new Email(value);
-        return Result.Success(email);
+        if (value.Length > Constants.MAX_LOW_TEXT_LENGTH)
+        {
+            return Errors.General.ValueIsInvalid("Email");
+        }
+        
+        return new Email(value);
     }
 }
