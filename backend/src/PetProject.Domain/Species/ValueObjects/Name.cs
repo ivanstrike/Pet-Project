@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
+
 namespace PetProject.Domain.Species;
 
 public record Name
@@ -9,14 +11,17 @@ public record Name
         Value = value;
     }
 
-    public static Result Create(string value)
+    public static Result<Name, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value) )
         {
-            return Result.Failure("Name can't be empty.");
+            return Errors.General.ValueIsRequired("Name");
         }
-        
-        var name = new Name(value);
-        return Result.Success(name);
+        if (value.Length > Constants.MAX_LOW_TEXT_LENGTH )
+        {
+            return Errors.General.ValueIsInvalid("Name");
+        }
+       
+        return new Name(value);
     }
 }

@@ -27,9 +27,13 @@ public class PetConfiguration: IEntityTypeConfiguration<Pet>
                 .HasColumnName("name");
         });
         
-        builder.Property(p => p.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(p => p.Description, pb =>
+        {
+            pb.Property(p => p.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("description");
+        });
         
         builder.Property(p => p.SpeciesId)
             .HasConversion(
@@ -49,10 +53,13 @@ public class PetConfiguration: IEntityTypeConfiguration<Pet>
                     .HasColumnName("color");
             });
         
-        builder.Property(p => p.HealthInformation)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
-            .HasColumnName("health_information");
+        builder.ComplexProperty(p => p.HealthInformation, cb =>
+        {
+            cb.Property(c => c.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("health_information");
+        });
 
         builder.ComplexProperty(p => p.Address, ab =>
         {

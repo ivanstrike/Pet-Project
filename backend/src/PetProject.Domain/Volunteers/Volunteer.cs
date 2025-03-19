@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 
 namespace PetProject.Domain.Volunteers;
 
@@ -15,8 +16,8 @@ public class Volunteer : Shared.Entity<VolunteerId>
         VolunteerId volunteerId,
         FullName fullname,
         Email email,
-        string description,
-        float experience,
+        Description description,
+        Experience experience,
         PhoneNumber phoneNumber,
         List<SocialNetwork> socialNetworks,
         List<Requisites> requisites,
@@ -34,8 +35,8 @@ public class Volunteer : Shared.Entity<VolunteerId>
     }
     public FullName FullName { get; private set; } = default!;
     public Email Email { get; private set; } = default!;
-    public string Description { get; private set; } = default!;
-    public float Experience { get; private set; } = default!;
+    public Description Description { get; private set; } = default!;
+    public Experience Experience { get; private set; } = default!;
     public PhoneNumber PhoneNumber { get; private set; } = default!;
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     public IReadOnlyList<Requisites> Requisites => _requisites;
@@ -44,17 +45,18 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsNeedForHome() => Pets.Count(x => x.Status.Value == "NeedForHome");
     public int PetsOnTreatment() => Pets.Count(x => x.Status.Value == "OnTreatment");
    
-    public static Result Create(
+    public static Result<Volunteer, Error> Create(
         FullName fullname,
         Email email,
-        string description,
-        float experience,
+        Description description,
+        Experience experience,
         PhoneNumber phoneNumber,
         List<SocialNetwork> socialNetworks,
         List<Requisites> requisites,
         List<Pet> pets)
     {
         var volunteerId = VolunteerId.NewPetId();
+        
         var volonteer = new Volunteer(
             volunteerId,
             fullname,
@@ -65,7 +67,8 @@ public class Volunteer : Shared.Entity<VolunteerId>
             socialNetworks,
             requisites,
             pets: pets);
-        return Result.Success(volonteer);
+
+        return volonteer;
     }
     
 }

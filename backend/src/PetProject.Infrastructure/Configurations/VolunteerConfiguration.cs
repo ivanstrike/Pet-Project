@@ -51,14 +51,21 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
                 .HasColumnName("email");
         });
         
-        builder.Property(v => v.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
-            .HasColumnName("description");
+        builder.ComplexProperty(v => v.Description, db =>
+        {
+            db.Property(d => d.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("description");
+        });
         
-        builder.Property(v => v.Experience)
-            .IsRequired()
-            .HasColumnName("experience");
+        builder.ComplexProperty(v => v.Experience, db =>
+        {
+            db.Property(d => d.Value)
+                .IsRequired()
+                .HasColumnName("experience");
+        });
+
         
         builder.ComplexProperty(p => p.PhoneNumber, pb =>
         {
