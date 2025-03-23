@@ -20,8 +20,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
         Experience experience,
         PhoneNumber phoneNumber,
         List<SocialNetwork> socialNetworks,
-        List<Requisites> requisites,
-        List<Pet> pets)
+        List<Requisites> requisites)
         : base(volunteerId)
     {
         FullName = fullname;
@@ -31,7 +30,6 @@ public class Volunteer : Shared.Entity<VolunteerId>
         PhoneNumber = phoneNumber;
         _socialNetworks = socialNetworks;
         _requisites = requisites;
-        _pets = pets;
     }
     public FullName FullName { get; private set; } = default!;
     public Email Email { get; private set; } = default!;
@@ -46,18 +44,16 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsOnTreatment() => Pets.Count(x => x.Status.Value == "OnTreatment");
    
     public static Result<Volunteer, Error> Create(
+        VolunteerId volunteerId,
         FullName fullname,
         Email email,
         Description description,
         Experience experience,
         PhoneNumber phoneNumber,
         List<SocialNetwork> socialNetworks,
-        List<Requisites> requisites,
-        List<Pet> pets)
+        List<Requisites> requisites)
     {
-        var volunteerId = VolunteerId.NewPetId();
-        
-        var volonteer = new Volunteer(
+       var volonteer = new Volunteer(
             volunteerId,
             fullname,
             email,
@@ -65,8 +61,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
             experience,
             phoneNumber,
             socialNetworks,
-            requisites,
-            pets: pets);
+            requisites);
 
         return volonteer;
     }
