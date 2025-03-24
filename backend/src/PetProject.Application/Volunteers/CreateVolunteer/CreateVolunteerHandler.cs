@@ -64,8 +64,15 @@ public class CreateVolunteerHandler
             requisites.Add(requisiteResult.Value);
         }
         
-        var volunteer = Volunteer.Create(volunteerId, fullName.Value, email.Value, 
-            description.Value, experience.Value, phoneNumber.Value, socialNetworks, requisites);
+        var volunteer = Volunteer.Create(
+            volunteerId, 
+            fullName.Value, 
+            email.Value, 
+            description.Value, 
+            experience.Value, 
+            phoneNumber.Value, 
+            socialNetworks, 
+            requisites);
         
         await _volunteersRepository.Add(volunteer.Value, cancellationToken);
 
