@@ -1,7 +1,6 @@
 using PetProject.Application;
-using PetProject.Application.Volunteers.CreateVolunteer;
 using PetProject.Infrastructure;
-using PetProject.Infrastructure.Repositories;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
