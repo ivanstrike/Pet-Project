@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using PetProject.Application.Volunteers;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers;
 

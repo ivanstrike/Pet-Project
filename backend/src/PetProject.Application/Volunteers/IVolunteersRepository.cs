@@ -2,7 +2,7 @@
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers;
 
-namespace PetProject.Infrastructure.Repositories;
+namespace PetProject.Application.Volunteers;
 
 public interface IVolunteersRepository
 {

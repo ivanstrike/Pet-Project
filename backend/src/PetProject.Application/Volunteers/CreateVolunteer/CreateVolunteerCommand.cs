@@ -1,10 +1,13 @@
 ﻿using PetProject.Application.DTO;
-using PetProject.Domain;
 
 namespace PetProject.Application.Volunteers.CreateVolunteer;
 
-public record CreateVolunteerRequest(
-    VolunteerDto VolunteerDto,
+public record CreateVolunteerCommand(
+    FullNameDto FullName,
+    string Email,
+    string Description,
+    float Experience,
+    string PhoneNumber,
     IEnumerable<SocialNetworkDto> SocialNetworkDto,
     IEnumerable<RequisitesDto> RequisitesDto)
 {
