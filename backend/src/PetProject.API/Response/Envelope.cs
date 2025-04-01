@@ -2,7 +2,6 @@
 
 namespace PetProject.API.Response;
 
-public record ResponseError(string? ErrorCode, string? ErrorMessage, string? InvalidField);
 public record Envelope
 {
     public object? Result { get; }
