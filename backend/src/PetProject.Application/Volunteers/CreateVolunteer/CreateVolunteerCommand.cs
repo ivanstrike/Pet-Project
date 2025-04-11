@@ -8,8 +8,8 @@ public record CreateVolunteerCommand(
     string Description,
     float Experience,
     string PhoneNumber,
-    IEnumerable<SocialNetworkDto> SocialNetworkDto,
-    IEnumerable<RequisitesDto> RequisitesDto)
+    IEnumerable<SocialNetworkDto> SocialNetworks,
+    IEnumerable<RequisitesDto> Requisites)
 {
     
 }

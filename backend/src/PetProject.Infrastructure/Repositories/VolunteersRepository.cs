@@ -25,14 +25,32 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id;
     }
 
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Volunteers.Attach(volunteer);
+        
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return volunteer.Id.Value;
+    }
     public async Task<Result<Volunteer,Error>> GetById(VolunteerId id, CancellationToken cancellationToken = default)
     {
         var volunteer = await _dbContext.Volunteers
-            .Include(v => v.Pets)
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
         
         if (volunteer == null)
             return Errors.General.NotFound(id);
+
+        return volunteer;
+    }
+
+    public async Task<Result<Volunteer, Error>> GetByEmail(Email email, CancellationToken cancellationToken = default)
+    {
+        var volunteer = await _dbContext.Volunteers
+            .FirstOrDefaultAsync(m => m.Email == email, cancellationToken);
+        
+        if (volunteer == null)
+            return Errors.General.NotFound();
 
         return volunteer;
     }

@@ -23,6 +23,14 @@ public class Errors
             var label = name ?? "";
             return Error.NotFound("value.is.invalid", $"{label} is required");
         }
-      
+    }
+    
+    public static class Volunteer
+    {
+        public static Error EmailAlreadyExists(string email)
+        {
+            return Error.Validation("email.already.exists", $"User with email: {email} already exists");
+        }
+        
     }
 }

@@ -34,12 +34,17 @@ public class CreateVolunteerHandler
         {
             return validationResult.ToErrorList();
         }
+        var email = Email.Create(command.Email).Value;
+        var existingVolunteer = await _volunteersRepository.GetByEmail(email, cancellationToken);
+        
+        if (existingVolunteer.IsSuccess)
+        {
+            return Errors.Volunteer.EmailAlreadyExists(email.Value).ToErrorList();
+        }
         
         var volunteerId = VolunteerId.NewVolunteerId();
         
         var fullName = FullName.Create(command.FullName.Name, command.FullName.Surname, command.FullName.Patronymic ).Value;
-        
-        var email = Email.Create(command.Email).Value;
         
         var experience = Experience.Create(command.Experience).Value;
       
@@ -49,7 +54,7 @@ public class CreateVolunteerHandler
         
 
         List<SocialNetwork> socialNetworks = [];
-        foreach (var socialNetwork in command.SocialNetworkDto)
+        foreach (var socialNetwork in command.SocialNetworks)
         {
             var socialNetworkResult = SocialNetwork.Create(
                 socialNetwork.Name, 
@@ -59,7 +64,7 @@ public class CreateVolunteerHandler
         }
 
         List<Requisites> requisites = [];
-        foreach (var requisite in command.RequisitesDto)
+        foreach (var requisite in command.Requisites)
         {
             var requisiteResult = Requisites.Create(
                 requisite.Name, 

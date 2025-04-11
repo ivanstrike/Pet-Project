@@ -6,8 +6,8 @@ namespace PetProject.Domain.Volunteers;
 
 public class Volunteer : Shared.Entity<VolunteerId>
 {
-    private readonly List<SocialNetwork> _socialNetworks = [];
-    private readonly List<Requisites> _requisites = [];
+    private IReadOnlyList<SocialNetwork> _socialNetworks = [];
+    private IReadOnlyList<Requisites> _requisites = [];
     private readonly List<Pet> _pets = [];
     // for ef
     private Volunteer() : base(VolunteerId.Empty()) {}
@@ -44,6 +44,19 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsNeedForHome() => Pets.Count(x => x.Status.Value == "NeedForHome");
     public int PetsOnTreatment() => Pets.Count(x => x.Status.Value == "OnTreatment");
    
+    public void UpdateMainInfo(
+        FullName fullname,
+        Email email,
+        Description description,
+        Experience experience,
+        PhoneNumber phoneNumber)
+    {
+        FullName = fullname;
+        Email = email;
+        Description = description;
+        Experience = experience;
+        PhoneNumber = phoneNumber;
+    }
     public static Result<Volunteer, Error> Create(
         VolunteerId volunteerId,
         FullName fullname,
@@ -66,5 +79,15 @@ public class Volunteer : Shared.Entity<VolunteerId>
 
         return volonteer;
     }
+
+
+    public void UpdateSocialMedia(List<SocialNetwork> socialNetworks)
+    {
+        _socialNetworks = socialNetworks;
+    }
     
+    public void UpdateRequisites(List<Requisites> requisites)
+    {
+        _requisites = requisites;
+    }
 }

@@ -23,8 +23,11 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
         builder.HasMany(v => v.Pets)
             .WithOne()
             .HasForeignKey("volunteer_id")
-            .OnDelete(DeleteBehavior.NoAction);
-
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Navigation(v => v.Pets)
+            .AutoInclude();
+        
         builder.ComplexProperty(v => v.FullName, vb =>
         {
             vb.Property(v => v.Name)
@@ -82,6 +85,7 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
         builder.Property(p => p.Requisites)
             .JsonValueObjectCollectionConversion()
             .HasColumnName("requisites");
+        
         
     }
 }

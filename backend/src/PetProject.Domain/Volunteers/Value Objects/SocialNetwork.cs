@@ -1,10 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
 namespace PetProject.Domain.Volunteers;
 
 public record SocialNetwork
 {
+    [JsonConstructor]
     private SocialNetwork(string name, string link)
     {
         Name = name;
