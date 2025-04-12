@@ -30,6 +30,7 @@ namespace PetProject.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     social_networks = table.Column<string>(type: "text", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     experience = table.Column<float>(type: "real", nullable: false),
@@ -74,6 +75,7 @@ namespace PetProject.Infrastructure.Migrations
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -95,7 +97,8 @@ namespace PetProject.Infrastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "volunteers",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

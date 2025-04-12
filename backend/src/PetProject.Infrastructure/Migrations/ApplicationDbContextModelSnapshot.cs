@@ -58,6 +58,10 @@ namespace PetProject.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
@@ -245,6 +249,10 @@ namespace PetProject.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("social_networks");
 
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetProject.Domain.Volunteers.Volunteer.Description#Description", b1 =>
                         {
                             b1.IsRequired();
@@ -320,7 +328,7 @@ namespace PetProject.Infrastructure.Migrations
                     b.HasOne("PetProject.Domain.Volunteers.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
                 });
 
