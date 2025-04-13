@@ -86,6 +86,10 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
             .JsonValueObjectCollectionConversion()
             .HasColumnName("requisites");
         
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
+        
         
     }
 }

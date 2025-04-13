@@ -9,6 +9,9 @@ public class Volunteer : Shared.Entity<VolunteerId>
     private IReadOnlyList<SocialNetwork> _socialNetworks = [];
     private IReadOnlyList<Requisites> _requisites = [];
     private readonly List<Pet> _pets = [];
+    
+    private bool _isDeleted = false;
+    
     // for ef
     private Volunteer() : base(VolunteerId.Empty()) {}
     private Volunteer(VolunteerId volunteerId) : base(volunteerId) {}
@@ -44,6 +47,37 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsNeedForHome() => Pets.Count(x => x.Status.Value == "NeedForHome");
     public int PetsOnTreatment() => Pets.Count(x => x.Status.Value == "OnTreatment");
    
+    public void Delete()
+    {
+        if (!_isDeleted)
+        {
+            _isDeleted = true;
+            DeletePets();
+        }
+    }
+    public void DeletePets()
+    {
+        foreach (var pet in _pets)
+        {
+            pet.Delete();
+        }
+    }
+    public void RestorePets()
+    {
+        foreach (var pet in _pets)
+        {
+            pet.Restore();
+        }
+    }
+    public void Restore()
+    {
+        if (_isDeleted)
+        {
+            _isDeleted = false;
+            RestorePets();
+        }
+    }
+    
     public void UpdateMainInfo(
         FullName fullname,
         Email email,

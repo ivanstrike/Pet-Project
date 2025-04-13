@@ -9,6 +9,7 @@ namespace PetProject.Domain;
 public class Pet : Shared.Entity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
+    private bool _isDeleted = false;
     //for ef
     private Pet() : base(PetId.Empty()){}
     private Pet(PetId id) : base(id){}
@@ -80,6 +81,18 @@ public class Pet : Shared.Entity<PetId>
     
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
+    public void Delete()
+    {
+        if(!_isDeleted)
+            _isDeleted = true;
+    }
+
+    public void Restore()
+    {
+        if(_isDeleted)
+            _isDeleted = false;
+    }
+    
     public static Result<Pet, Error> Create(
         Name name,
         Description description,
