@@ -113,6 +113,12 @@ public class PetConfiguration: IEntityTypeConfiguration<Pet>
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
                 .HasColumnName("status");
         });
+        builder.ComplexProperty(p => p.SerialNumber, sb =>
+        {
+            sb.Property(s => s.Value)
+                .IsRequired(true)
+                .HasColumnName("serial_number");
+        });
 
         builder.Property(p => p.Requisites)
             .JsonValueObjectCollectionConversion()

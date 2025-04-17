@@ -31,11 +31,8 @@ public record FullName
     
         if (surname.Length > MAXNAMELENGTH)
             return Errors.General.ValueIsInvalid("Surname");
-    
-        if (string.IsNullOrWhiteSpace(patronymic))
-            return Errors.General.ValueIsRequired("Patronymic");
-    
-        if (patronymic.Length > MAXNAMELENGTH)
+ 
+        if (!string.IsNullOrWhiteSpace(patronymic) && patronymic.Length > MAXNAMELENGTH)
             return Errors.General.ValueIsInvalid("Patronymic");
     
         return new FullName(name, surname, patronymic);
