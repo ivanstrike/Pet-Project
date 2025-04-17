@@ -31,6 +31,11 @@ public class Errors
         {
             return Error.Validation("email.already.exists", $"User with email: {email} already exists");
         }
+        public static Error PetNotFound(SerialNumber? serialNumber = null)
+        {
+            var forSerialNumber = serialNumber == null ? "" : $"for serialNumber {serialNumber.Value}";
+            return Error.NotFound("record.not.found", $"record not found {forSerialNumber}");
+        }
         
     }
 }

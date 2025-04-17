@@ -9,10 +9,17 @@ namespace PetProject.Domain;
 public class Pet : Shared.Entity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
+
     private bool _isDeleted = false;
+
     //for ef
-    private Pet() : base(PetId.Empty()){}
-    private Pet(PetId id) : base(id){}
+    private Pet() : base(PetId.Empty())
+    {
+    }
+
+    private Pet(PetId id) : base(id)
+    {
+    }
 
     public Pet(
         PetId petId,
@@ -30,8 +37,8 @@ public class Pet : Shared.Entity<PetId>
         bool isVaccinated,
         Status helpStatus,
         List<Requisites> requisites
-        )
-    :base(petId)
+    )
+        : base(petId)
     {
         Name = name;
         Description = description;
@@ -48,52 +55,54 @@ public class Pet : Shared.Entity<PetId>
         Status = helpStatus;
         _requisites = requisites;
         CreatedAt = DateTime.UtcNow;
-        
     }
-        
+
     public Name Name { get; private set; } = default!;
-    
+
     public Description Description { get; private set; } = default!;
-    
+
     public SpeciesId SpeciesId { get; private set; } = default!;
-    
+
     public BreedId BreedId { get; private set; } = default!;
-    
+
     public Color Color { get; private set; } = default!;
-    
+
     public HealthInformation HealthInformation { get; private set; } = default!;
-    
+
     public Address Address { get; private set; } = default!;
-    
-    public Size Size { get; private set; }  = default!;
-    
+
+    public Size Size { get; private set; } = default!;
+
     public PhoneNumber OwnerPhone { get; private set; } = default!;
-    
+
     public bool IsNeutered { get; private set; } = default!;
 
     public DateOnly BirthDate { get; private set; } = default!;
-    
-    public bool IsVaccinated { get; private set; } = default!;
-    
-    public Status Status { get; private set; } = default!;
-    
-    public IReadOnlyList<Requisites> Requisites => _requisites;
-    
-    public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
+    public bool IsVaccinated { get; private set; } = default!;
+
+    public Status Status { get; private set; } = default!;
+
+    public IReadOnlyList<Requisites> Requisites => _requisites;
+
+    public DateTime CreatedAt { get; private set; } = DateTime.Now;
+    public SerialNumber SerialNumber { get; private set; }
+
+    public void SetSerialNumber(SerialNumber number) => SerialNumber = number;
     public void Delete()
     {
-        if(!_isDeleted)
+        if (!_isDeleted)
             _isDeleted = true;
     }
 
     public void Restore()
     {
-        if(_isDeleted)
+        if (_isDeleted)
             _isDeleted = false;
     }
-    
+
     public static Result<Pet, Error> Create(
+        PetId petId,
         Name name,
         Description description,
         SpeciesId speciesId,
@@ -108,28 +117,25 @@ public class Pet : Shared.Entity<PetId>
         bool isVaccinated,
         Status helpStatus,
         List<Requisites> requisites
-        )
+    )
     {
-        
-        var petId = PetId.NewPetId();
         var pet = new Pet(
             petId,
-            name, 
-            description, 
-            speciesId, 
-            breedId, 
-            color, 
-            healthInformation, 
-            address, 
-            size,  
-            ownerPhone, 
-            isNeutered,  
-            birthDate, 
-            isVaccinated, 
-            helpStatus, 
+            name,
+            description,
+            speciesId,
+            breedId,
+            color,
+            healthInformation,
+            address,
+            size,
+            ownerPhone,
+            isNeutered,
+            birthDate,
+            isVaccinated,
+            helpStatus,
             requisites);
 
         return pet;
     }
-    
 }
