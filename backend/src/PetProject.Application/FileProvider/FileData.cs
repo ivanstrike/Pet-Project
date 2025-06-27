@@ -1,3 +1,3 @@
 ﻿namespace PetProject.Application.FileProvider;
 
-public record FileData(string BucketName, string FileName);
+public record FileData(string ObjectName, string BucketName);

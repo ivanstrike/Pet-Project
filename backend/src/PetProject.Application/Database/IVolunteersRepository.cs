@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.Value_Objects;
 
-namespace PetProject.Application.Volunteers;
+namespace PetProject.Application.Database;
 
 public interface IVolunteersRepository
 {

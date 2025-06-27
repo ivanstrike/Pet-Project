@@ -1,9 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
+using PetProject.Domain.Species.ValueObjects;
 
 namespace PetProject.Domain.Species;
 
 public class Breed : Shared.Entity<BreedId>
 {
+    private bool _isDeleted = false;
     // for ef
     private Breed() : base(BreedId.Empty()) {}
     private Breed(BreedId breedId) : base(breedId) {}
@@ -14,12 +17,21 @@ public class Breed : Shared.Entity<BreedId>
     {
         Name = name;
     }
-
-    public static Result Create(Name name)
+    public void Delete()
     {
-        var breedId = BreedId.NewBreedId();
+        if (!_isDeleted)
+            _isDeleted = true;
+    }
+
+    public void Restore()
+    {
+        if (_isDeleted)
+            _isDeleted = false;
+    }
+    public static Result<Breed, Error> Create(BreedId breedId, Name name)
+    {
         var breed = new Breed(breedId, name);
-        return Result.Success(breed);
+        return breed;
     }
     
     

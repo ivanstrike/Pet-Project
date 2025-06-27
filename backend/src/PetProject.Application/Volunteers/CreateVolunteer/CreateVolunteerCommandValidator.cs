@@ -4,6 +4,7 @@ using PetProject.Application.Validation;
 using PetProject.Domain;
 using PetProject.Domain.Shared.Value_Objects;
 using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.Value_Objects;
 
 namespace PetProject.Application.Volunteers.CreateVolunteer;
 

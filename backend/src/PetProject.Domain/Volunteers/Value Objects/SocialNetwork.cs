@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
-namespace PetProject.Domain.Volunteers;
+namespace PetProject.Domain.Volunteers.Value_Objects;
 
 public record SocialNetwork
 {

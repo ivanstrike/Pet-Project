@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Species;
+using PetProject.Domain.Species.ValueObjects;
 using PetProject.Infrastructure.Extensions;
 
 namespace PetProject.Infrastructure.Configurations;
@@ -32,5 +33,9 @@ public class SpeciesConfiguration: IEntityTypeConfiguration<Species>
             .WithOne()
             .HasForeignKey("species_id")
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
     }
 }

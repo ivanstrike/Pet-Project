@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
-namespace PetProject.Domain;
+namespace PetProject.Domain.Pets.ValueObjects;
 
 public struct Address
 {

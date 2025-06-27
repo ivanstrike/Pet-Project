@@ -1,3 +1,3 @@
 ﻿namespace PetProject.Application.DTO;
 
-public class SizeDto(float Height, float Weight);
+public record SizeDto(float Height, float Weight);

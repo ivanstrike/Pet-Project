@@ -1,9 +1,7 @@
 ﻿using PetProject.Application.DTO;
-using PetProject.Application.Volunteers.CreateVolunteer;
 using PetProject.Application.Volunteers.UpdateMainInfo;
-using PetProject.Domain.Species;
 
-namespace PetProject.API.Controllers.Requests;
+namespace PetProject.API.Controllers.VolunteersRequests;
 
 public record UpdateMainInfoRequest(
     string Name,

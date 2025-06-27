@@ -13,7 +13,7 @@ using PetProject.Infrastructure;
 namespace PetProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250412195216_Initial")]
+    [Migration("20250626202440_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,15 +26,11 @@ namespace PetProject.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetProject.Domain.Pet", b =>
+            modelBuilder.Entity("PetProject.Domain.Pets.Pet", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date")
-                        .HasColumnName("birth_date");
 
                     b.Property<Guid>("BreedId")
                         .HasColumnType("uuid")
@@ -44,13 +40,10 @@ namespace PetProject.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<bool>("IsNeutered")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_neutered");
-
-                    b.Property<bool>("IsVaccinated")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_vaccinated");
+                    b.Property<string>("Files")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("files");
 
                     b.Property<string>("Requisites")
                         .IsRequired()
@@ -69,7 +62,7 @@ namespace PetProject.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Address", "PetProject.Domain.Pet.Address#Address", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Address", "PetProject.Domain.Pets.Pet.Address#Address", b1 =>
                         {
                             b1.Property<string>("City")
                                 .IsRequired()
@@ -95,7 +88,16 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("street");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Color", "PetProject.Domain.Pet.Color#Color", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("BirthDate", "PetProject.Domain.Pets.Pet.BirthDate#BirthDate", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateOnly>("Value")
+                                .HasColumnType("date")
+                                .HasColumnName("birth_date");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Color", "PetProject.Domain.Pets.Pet.Color#Color", b1 =>
                         {
                             b1.IsRequired();
 
@@ -106,7 +108,7 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("color");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Description", "PetProject.Domain.Pet.Description#Description", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Description", "PetProject.Domain.Pets.Pet.Description#Description", b1 =>
                         {
                             b1.IsRequired();
 
@@ -117,7 +119,7 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("description");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("HealthInformation", "PetProject.Domain.Pet.HealthInformation#HealthInformation", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("HealthInformation", "PetProject.Domain.Pets.Pet.HealthInformation#HealthInformation", b1 =>
                         {
                             b1.IsRequired();
 
@@ -128,7 +130,25 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("health_information");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Pet.Name#Name", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("IsNeutered", "PetProject.Domain.Pets.Pet.IsNeutered#IsNeutered", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<bool>("Value")
+                                .HasColumnType("boolean")
+                                .HasColumnName("is_neutered");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("IsVaccinated", "PetProject.Domain.Pets.Pet.IsVaccinated#IsVaccinated", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<bool>("Value")
+                                .HasColumnType("boolean")
+                                .HasColumnName("is_vaccinated");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Pets.Pet.Name#Name", b1 =>
                         {
                             b1.IsRequired();
 
@@ -139,7 +159,7 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("name");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("OwnerPhone", "PetProject.Domain.Pet.OwnerPhone#PhoneNumber", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("OwnerPhone", "PetProject.Domain.Pets.Pet.OwnerPhone#PhoneNumber", b1 =>
                         {
                             b1.IsRequired();
 
@@ -150,7 +170,16 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("owner_phone");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Size", "PetProject.Domain.Pet.Size#Size", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("SerialNumber", "PetProject.Domain.Pets.Pet.SerialNumber#SerialNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("serial_number");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Size", "PetProject.Domain.Pets.Pet.Size#Size", b1 =>
                         {
                             b1.IsRequired();
 
@@ -163,7 +192,7 @@ namespace PetProject.Infrastructure.Migrations
                                 .HasColumnName("weight");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Status", "PetProject.Domain.Pet.Status#Status", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Status", "PetProject.Domain.Pets.Pet.Status#Status", b1 =>
                         {
                             b1.IsRequired();
 
@@ -188,6 +217,10 @@ namespace PetProject.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<Guid?>("species_id")
                         .HasColumnType("uuid")
@@ -218,6 +251,10 @@ namespace PetProject.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Species.Species.Name#Name", b1 =>
                         {
@@ -326,7 +363,7 @@ namespace PetProject.Infrastructure.Migrations
                     b.ToTable("volunteers", (string)null);
                 });
 
-            modelBuilder.Entity("PetProject.Domain.Pet", b =>
+            modelBuilder.Entity("PetProject.Domain.Pets.Pet", b =>
                 {
                     b.HasOne("PetProject.Domain.Volunteers.Volunteer", null)
                         .WithMany("Pets")

@@ -1,5 +1,7 @@
 using FluentAssertions;
 using PetProject.Domain;
+using PetProject.Domain.Pets;
+using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared.Value_Objects;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers;

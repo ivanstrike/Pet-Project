@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
+using CSharpFunctionalExtensions;
+using PetProject.Domain.Pets.ValueObjects;
 
 namespace PetProject.Domain.Shared;
 

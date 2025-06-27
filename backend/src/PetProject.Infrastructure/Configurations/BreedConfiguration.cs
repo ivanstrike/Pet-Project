@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Species;
+using PetProject.Domain.Species.ValueObjects;
 
 namespace PetProject.Infrastructure.Configurations;
 
@@ -26,5 +27,9 @@ public class BreedConfiguration: IEntityTypeConfiguration<Breed>
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
                 .HasColumnName("name");
         });
+        
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("is_deleted");
     }
 }

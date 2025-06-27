@@ -1,11 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetProject.Application.Database;
 using PetProject.Application.Extensions;
 using PetProject.Application.Volunteers.UpdateSocialMedia;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.Value_Objects;
 using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.Value_Objects;
 
 namespace PetProject.Application.Volunteers.UpdateRequisites;
 

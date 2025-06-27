@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.Value_Objects;
 using PetProject.Infrastructure.Extensions;
 
 namespace PetProject.Infrastructure.Configurations;

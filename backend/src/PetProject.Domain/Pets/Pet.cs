@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.Value_Objects;
-using PetProject.Domain.Species;
-using PetProject.Domain.Volunteers;
+using PetProject.Domain.Species.ValueObjects;
 
-namespace PetProject.Domain;
+namespace PetProject.Domain.Pets;
 
 public class Pet : Shared.Entity<PetId>
 {
@@ -32,11 +32,12 @@ public class Pet : Shared.Entity<PetId>
         Address address,
         Size size,
         PhoneNumber ownerPhone,
-        bool isNeutered,
-        DateOnly birthDate,
-        bool isVaccinated,
+        IsNeutered isNeutered,
+        BirthDate birthDate,
+        IsVaccinated isVaccinated,
         Status helpStatus,
-        List<Requisites> requisites
+        List<Requisites> requisites,
+        ValueObjectList<PetFile> files
     )
         : base(petId)
     {
@@ -54,7 +55,8 @@ public class Pet : Shared.Entity<PetId>
         IsVaccinated = isVaccinated;
         Status = helpStatus;
         _requisites = requisites;
-        CreatedAt = DateTime.UtcNow;
+        Files = files;
+        CreatedAt = DateTime.UtcNow;;
     }
 
     public Name Name { get; private set; } = default!;
@@ -75,20 +77,26 @@ public class Pet : Shared.Entity<PetId>
 
     public PhoneNumber OwnerPhone { get; private set; } = default!;
 
-    public bool IsNeutered { get; private set; } = default!;
+    public IsNeutered IsNeutered { get; private set; } = default!;
 
-    public DateOnly BirthDate { get; private set; } = default!;
+    public BirthDate BirthDate { get; private set; } = default!;
 
-    public bool IsVaccinated { get; private set; } = default!;
-
+    public IsVaccinated IsVaccinated { get; private set; } = default!;
+    
     public Status Status { get; private set; } = default!;
-
+    
     public IReadOnlyList<Requisites> Requisites => _requisites;
 
+    public ValueObjectList<PetFile> Files { get; private set; } = default!;
+    
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
+    
     public SerialNumber SerialNumber { get; private set; }
 
+    public void UpdateFiles(List<PetFile> files) => Files = new ValueObjectList<PetFile>(files);
+    
     public void SetSerialNumber(SerialNumber number) => SerialNumber = number;
+
     public void Delete()
     {
         if (!_isDeleted)
@@ -100,7 +108,7 @@ public class Pet : Shared.Entity<PetId>
         if (_isDeleted)
             _isDeleted = false;
     }
-
+    
     public static Result<Pet, Error> Create(
         PetId petId,
         Name name,
@@ -112,9 +120,9 @@ public class Pet : Shared.Entity<PetId>
         Address address,
         Size size,
         PhoneNumber ownerPhone,
-        bool isNeutered,
-        DateOnly birthDate,
-        bool isVaccinated,
+        IsNeutered isNeutered,
+        BirthDate birthDate,
+        IsVaccinated isVaccinated,
         Status helpStatus,
         List<Requisites> requisites
     )
@@ -134,7 +142,8 @@ public class Pet : Shared.Entity<PetId>
             birthDate,
             isVaccinated,
             helpStatus,
-            requisites);
+            requisites,
+             ValueObjectList<PetFile>.Empty());
 
         return pet;
     }

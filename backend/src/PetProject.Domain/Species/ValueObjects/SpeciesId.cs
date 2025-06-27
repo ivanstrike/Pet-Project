@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain;
+﻿namespace PetProject.Domain.Species.ValueObjects;
 
 public record SpeciesId
 {
@@ -10,4 +10,5 @@ public record SpeciesId
     public static SpeciesId Empty()  => new(Guid.Empty);
     
     public static SpeciesId Create(Guid id) => new (id);
+    public static implicit operator Guid(SpeciesId id) => id.Value;
 }

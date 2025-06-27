@@ -1,4 +1,5 @@
 using PetProject.API;
+using PetProject.API.Extensions;
 using PetProject.API.Middlewares;
 using PetProject.Application;
 using PetProject.Infrastructure;

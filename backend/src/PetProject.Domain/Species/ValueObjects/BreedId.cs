@@ -1,6 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace PetProject.Domain;
+﻿namespace PetProject.Domain.Species.ValueObjects;
 
 public record BreedId
 {
@@ -12,4 +10,5 @@ public record BreedId
     public static BreedId Empty()  => new(Guid.Empty);
     
     public static BreedId Create(Guid id) => new (id);
+    public static implicit operator Guid(BreedId breedId) => breedId;
 }
