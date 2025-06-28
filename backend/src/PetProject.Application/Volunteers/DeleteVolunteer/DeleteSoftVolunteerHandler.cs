@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetProject.Application.Database;
 using PetProject.Application.Extensions;
 using PetProject.Application.Volunteers.CreateVolunteer;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Volunteers;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Volunteers.DeleteVolunteer;
 

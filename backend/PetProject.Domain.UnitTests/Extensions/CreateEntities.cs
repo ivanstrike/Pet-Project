@@ -1,7 +1,9 @@
 ﻿using PetProject.Domain;
 using PetProject.Domain.Shared.Value_Objects;
-using PetProject.Domain.Species;
-using PetProject.Domain.Volunteers;
+using PetProject.Domain.SpeciesContext.SpeciesVO;
+using PetProject.Domain.VolunteerContext;
+using PetProject.Domain.VolunteerContext.PetVO;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.UnitTests.Extensions;
 
@@ -40,12 +42,13 @@ public static class CreateEntities
         var address = Address.Create("Address", "City", "Country", "5").Value;
         var size = Size.Create(5, 3).Value;
         var ownerPhone = PhoneNumber.Create("0888888888").Value;
-        var isNeutered = false;
-        var birthDate = DateOnly.Parse("2011-09-19");
-        var isVaccinated = false;
+        var isNeutered = IsNeutered.Create(true).Value;
+        var birthDate = BirthDate.Create("2011-09-19").Value;
+        var isVaccinated = IsVaccinated.Create(true).Value;
         var helpStatus = Status.Create("Help Status").Value;
 
-        var pet = Pet.Create(petId,
+        var pet = Pet.Create(
+            petId,
             name, 
             description, 
             speciesId, 
@@ -59,6 +62,7 @@ public static class CreateEntities
             birthDate, 
             isVaccinated, 
             helpStatus, 
+            null,
             null).Value;
         return pet;
     }

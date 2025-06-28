@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetProject.API.Controllers.Requests;
+using PetProject.API.Controllers.VolunteersRequests;
 using PetProject.API.Extensions;
+using PetProject.API.Processors;
 using PetProject.API.Response;
-using PetProject.Application.FileProvider;
 using PetProject.Application.Volunteers.AddPet;
+using PetProject.Application.Volunteers.AddPetFiles;
 using PetProject.Application.Volunteers.CreateVolunteer;
+using PetProject.Application.Volunteers.DeletePetFiles;
 using PetProject.Application.Volunteers.DeleteVolunteer;
 using PetProject.Application.Volunteers.UpdateMainInfo;
 using PetProject.Application.Volunteers.UpdateRequisites;
@@ -104,4 +106,63 @@ public class VolunteersController : ControllerBase
         return Ok(Envelope.Ok(result.Value));
     }
 
+    [HttpPost("{id:guid}/pet")]
+    public async Task<ActionResult<Guid>> AddPet(
+        [FromRoute] Guid id,
+        [FromBody] AddPetRequest request,
+        [FromServices] AddPetHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id);
+
+        var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return Ok(Envelope.Ok(result.Value));
+    }
+    
+    [HttpPost("{volunteerId:guid}/pet/{petId:guid}/file")]
+    public async Task<ActionResult<Guid>> AddPetFiles(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromForm] AddPetFilesRequest request,
+        [FromServices] AddPetFilesHandler handler,
+        CancellationToken cancellationToken)
+    {
+        await using var fileProcessor = new FormFileProcessor();
+
+        var filesDtos = fileProcessor.Process(request.Files);
+
+        var command = request.ToCommand(volunteerId, petId, filesDtos);
+
+        var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return Ok(Envelope.Ok(result.Value));
+    }
+    
+    [HttpDelete("{volunteerId:guid}/pet/{petId:guid}/file")]
+    public async Task<ActionResult<Guid>> DeletePetFiles(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromBody] DeletePetFilesRequest request,
+        [FromServices] DeletePetFilesHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
+
+        var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return Ok(Envelope.Ok(result.Value));
+    }
 }

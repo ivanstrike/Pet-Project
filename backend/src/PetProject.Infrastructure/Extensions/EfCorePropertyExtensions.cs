@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetProject.Domain.Shared.Value_Objects;
 
 namespace PetProject.Infrastructure.Extensions;
 
@@ -13,7 +14,7 @@ public static class EfCorePropertyExtensions
             v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
             v => JsonSerializer.Deserialize<TValueObject>(v, JsonSerializerOptions.Default)!);
     }
-    
+
     public static PropertyBuilder<IReadOnlyList<TValueObject>> JsonValueObjectCollectionConversion<TValueObject>(
         this PropertyBuilder<IReadOnlyList<TValueObject>> builder)
     {

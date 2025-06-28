@@ -14,9 +14,8 @@ public record AddPetCommand(
     SizeDto Size,
     string OwnerPhone,
     bool IsNeutered,
-    DateOnly BirthDate,
+    string BirthDate,
     bool IsVaccinated,
-    string HelpStatus,
-    IEnumerable<RequisitesDto> Requisites,
-    IEnumerable<FileDto> Files
+    string Status,
+    IEnumerable<RequisitesDto> Requisites
 );

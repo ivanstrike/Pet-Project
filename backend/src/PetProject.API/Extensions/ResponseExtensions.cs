@@ -6,7 +6,7 @@ using PetProject.Domain.Shared;
 
 namespace PetProject.API.Extensions;
 
-public static class ResponseExtensions
+public static class  ResponseExtensions
 {
     public static ActionResult ToResponse(this Error error)
     {

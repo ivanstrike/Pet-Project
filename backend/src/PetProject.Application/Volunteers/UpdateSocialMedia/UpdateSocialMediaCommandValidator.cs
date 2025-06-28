@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using PetProject.Application.Validation;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Volunteers;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Volunteers.UpdateSocialMedia;
 

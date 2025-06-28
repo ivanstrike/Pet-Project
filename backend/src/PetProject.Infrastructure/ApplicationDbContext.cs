@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PetProject.Domain.Species;
-using PetProject.Domain.Volunteers;
+using PetProject.Domain.SpeciesContext;
+using PetProject.Domain.VolunteerContext;
 
 namespace PetProject.Infrastructure;
 

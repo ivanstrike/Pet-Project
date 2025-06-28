@@ -1,3 +1,5 @@
-﻿namespace PetProject.Application.FileProvider;
+﻿using PetProject.Domain.VolunteerContext.PetVO;
 
-public record UploadFileData(Stream Stream, string BucketName, string FileName);
+namespace PetProject.Application.FileProvider;
+
+public record UploadFileData(Stream Stream, FilePath FilePath, string BucketName);
