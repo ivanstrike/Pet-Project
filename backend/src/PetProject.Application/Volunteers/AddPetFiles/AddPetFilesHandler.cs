@@ -3,12 +3,9 @@ using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
 using PetProject.Application.FileProvider;
 using PetProject.Application.Providers;
-using PetProject.Application.Volunteers.AddPet;
-using PetProject.Domain;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.Value_Objects;
+using PetProject.Domain.VolunteerContext.PetVO;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Volunteers.AddPetFiles;
 
@@ -36,7 +33,7 @@ public class AddPetFilesHandler
         AddPetFilesCommand command,
         CancellationToken cancellationToken = default)
     {
-        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
+        using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         try
         {
             
@@ -68,11 +65,6 @@ public class AddPetFilesHandler
                 .Select(f => f.FilePath)
                 .Select(f => new PetFile(f))
                 .ToList();
-
-            foreach (var petFile in petResult.Files.Values)
-            {
-                petFiles.Add(petFile);
-            }
 
             petResult.UpdateFiles(petFiles);
             

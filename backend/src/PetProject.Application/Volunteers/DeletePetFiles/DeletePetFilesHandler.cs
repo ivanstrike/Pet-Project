@@ -3,12 +3,9 @@ using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
 using PetProject.Application.FileProvider;
 using PetProject.Application.Providers;
-using PetProject.Application.Volunteers.AddPetFiles;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Shared.Value_Objects;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.Value_Objects;
+using PetProject.Domain.VolunteerContext.PetVO;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Volunteers.DeletePetFiles;
 
@@ -20,8 +17,7 @@ public class DeletePetFilesHandler
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly ILogger<DeletePetFilesHandler> _logger;
 
-    public DeletePetFilesHandler(
-        IFileProvider fileProvider,
+    public DeletePetFilesHandler(IFileProvider fileProvider,
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
         ILogger<DeletePetFilesHandler> logger)
@@ -32,11 +28,10 @@ public class DeletePetFilesHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, ErrorList>> Handle(
-        DeletePetFilesCommand command,
+    public async Task<Result<Guid, ErrorList>> Handle(DeletePetFilesCommand command,
         CancellationToken cancellationToken = default)
     {
-        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
+        using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         try
         {
             var volunteerResult = await _volunteersRepository
@@ -52,6 +47,7 @@ public class DeletePetFilesHandler
                 return Errors.General.NotFound(command.PetId).ToErrorList();
 
             List<FileData> deleteFilesData = [];
+            
             List<PetFile> petFiles = [];
 
             foreach (var file in petResult.Files)
@@ -62,13 +58,14 @@ public class DeletePetFilesHandler
                     petFiles.Add(file);
             }
 
-            petResult.UpdateFiles(petFiles);
+            petResult.DeleteFiles(petFiles);
+
+            await _unitOfWork.SaveChanges(cancellationToken);
 
             var deleteResult = await _fileProvider.DeleteFiles(deleteFilesData, cancellationToken);
             if (deleteResult.IsFailure)
                 return deleteResult.Error.ToErrorList();
             
-            await _unitOfWork.SaveChanges(cancellationToken);
             transaction.Commit();
 
             return petResult.Id.Value;

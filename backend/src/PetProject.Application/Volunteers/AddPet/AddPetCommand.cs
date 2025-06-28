@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using PetProject.Application.DTO;
+﻿using PetProject.Application.DTO;
 
 namespace PetProject.Application.Volunteers.AddPet;
 

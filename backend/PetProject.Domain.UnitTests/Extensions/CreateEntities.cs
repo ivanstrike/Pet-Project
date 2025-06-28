@@ -1,11 +1,9 @@
 ﻿using PetProject.Domain;
-using PetProject.Domain.Pets;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared.Value_Objects;
-using PetProject.Domain.Species;
-using PetProject.Domain.Species.ValueObjects;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.Value_Objects;
+using PetProject.Domain.SpeciesContext.SpeciesVO;
+using PetProject.Domain.VolunteerContext;
+using PetProject.Domain.VolunteerContext.PetVO;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.UnitTests.Extensions;
 

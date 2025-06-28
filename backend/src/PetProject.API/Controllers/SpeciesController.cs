@@ -2,7 +2,7 @@
 using PetProject.API.Controllers.SpeciesRequests;
 using PetProject.API.Extensions;
 using PetProject.API.Response;
-using PetProject.Application.Species.CreateSpecies;
+using PetProject.Application.SpeciesHandlers.CreateSpecies;
 
 namespace PetProject.API.Controllers;
 

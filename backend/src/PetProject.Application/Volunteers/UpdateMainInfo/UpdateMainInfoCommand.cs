@@ -1,5 +1,4 @@
 ﻿using PetProject.Application.DTO;
-using PetProject.Domain.Volunteers;
 
 namespace PetProject.Application.Volunteers.UpdateMainInfo;
 

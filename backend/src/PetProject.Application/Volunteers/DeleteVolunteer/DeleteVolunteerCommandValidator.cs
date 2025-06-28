@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PetProject.Application.Validation;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Volunteers;
 
 namespace PetProject.Application.Volunteers.DeleteVolunteer;
 

@@ -1,5 +1,4 @@
-﻿using PetProject.Domain;
-using PetProject.Domain.Pets.ValueObjects;
+﻿using PetProject.Domain.VolunteerContext.PetVO;
 
 namespace PetProject.Application.FileProvider;
 

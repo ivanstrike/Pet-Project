@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PetProject.Application.DTO;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.Value_Objects;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Validation;
 

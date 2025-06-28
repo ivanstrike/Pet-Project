@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain;
-using PetProject.Domain.Pets;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Species.ValueObjects;
+using PetProject.Domain.SpeciesContext.SpeciesVO;
+using PetProject.Domain.VolunteerContext;
+using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.Infrastructure.Extensions;
 
 namespace PetProject.Infrastructure.Configurations;
@@ -136,7 +136,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasColumnName("requisites");
 
         builder.Property(p => p.Files)
-            .JsonValueObjectCollectionConversion<PetFile>()
+            .JsonValueObjectCollectionConversion()
             .HasColumnName("files");
 
         builder.Property(p => p.CreatedAt)

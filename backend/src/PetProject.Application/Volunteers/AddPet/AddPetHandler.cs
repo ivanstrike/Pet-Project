@@ -2,17 +2,13 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
-using PetProject.Application.DTO;
 using PetProject.Application.Extensions;
-using PetProject.Domain;
-using PetProject.Domain.Pets;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.Value_Objects;
-using PetProject.Domain.Species;
-using PetProject.Domain.Species.ValueObjects;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.Value_Objects;
+using PetProject.Domain.SpeciesContext.SpeciesVO;
+using PetProject.Domain.VolunteerContext;
+using PetProject.Domain.VolunteerContext.PetVO;
+using PetProject.Domain.VolunteerContext.VolunteerVO;
 
 namespace PetProject.Application.Volunteers.AddPet;
 
@@ -26,7 +22,8 @@ public class AddPetHandler
 
     public AddPetHandler(IVolunteersRepository volunteersRepository,
         IValidator<AddPetCommand> validator,
-        IUnitOfWork unitOfWork, ILogger<AddPetHandler> logger,
+        IUnitOfWork unitOfWork, 
+        ILogger<AddPetHandler> logger,
         ISpeciesRepository speciesRepository)
     {
         _volunteersRepository = volunteersRepository;
@@ -39,7 +36,7 @@ public class AddPetHandler
     public async Task<Result<Guid, ErrorList>> Handle(AddPetCommand command,
         CancellationToken cancellationToken = default)
     {
-        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
+        using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         try
         {
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -57,6 +54,7 @@ public class AddPetHandler
             }
 
             var speciesId = SpeciesId.Create(command.SpeciesId);
+            
             var speciesResult = await _speciesRepository.GetById(speciesId, cancellationToken);
             if (speciesResult.IsFailure)
             {
@@ -64,6 +62,7 @@ public class AddPetHandler
             }
 
             var breedId = BreedId.Create(command.BreedId);
+            
             var breedResult = speciesResult.Value.Breeds.FirstOrDefault(s => s.Id == breedId);
             if (breedResult == null)
             {
@@ -71,10 +70,14 @@ public class AddPetHandler
             }
 
             var petId = PetId.NewPetId();
+
             var name = Name.Create(command.Name).Value;
+
             var description = Description.Create(command.Description).Value;
+
             var color = Color.Create(command.Color).Value;
             var healthInformation = HealthInformation.Create(command.HealthInformation).Value;
+
             var address = Address.Create(command.Address.Country,
                     command.Address.City,
                     command.Address.Street,
@@ -82,11 +85,17 @@ public class AddPetHandler
                 .Value;
 
             var size = Size.Create(command.Size.Height, command.Size.Weight).Value;
+
             var ownerPhone = PhoneNumber.Create(command.OwnerPhone).Value;
+
             var isNeutered = IsNeutered.Create(command.IsNeutered).Value;
+
             var birthDate = BirthDate.Create(command.BirthDate).Value;
+            
             var isVaccinated = IsVaccinated.Create(command.IsVaccinated).Value;
+            
             var status = Status.Create(command.Status).Value;
+            
             List<Requisites> requisites = [ ];
             foreach (var requisite in command.Requisites)
             {

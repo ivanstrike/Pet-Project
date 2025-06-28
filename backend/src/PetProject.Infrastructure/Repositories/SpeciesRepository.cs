@@ -1,11 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PetProject.Application.Database;
-using PetProject.Application.Volunteers;
-using PetProject.Domain;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Species;
-using PetProject.Domain.Species.ValueObjects;
+using PetProject.Domain.SpeciesContext;
+using PetProject.Domain.SpeciesContext.SpeciesVO;
 
 namespace PetProject.Infrastructure.Repositories;
 
@@ -21,7 +19,7 @@ public class SpeciesRepository : ISpeciesRepository
     {
         await _dbContext.Species.AddAsync(species, cancellationToken);
         
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        //await _dbContext.SaveChangesAsync(cancellationToken);
 
         return species.Id;
     }

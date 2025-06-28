@@ -1,8 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Application.FileProvider;
-using PetProject.Domain;
-using PetProject.Domain.Pets.ValueObjects;
 using PetProject.Domain.Shared;
+using PetProject.Domain.VolunteerContext.PetVO;
 
 namespace PetProject.Application.Providers;
 
