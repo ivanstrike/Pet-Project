@@ -10,4 +10,4 @@ Since the project is in development, these instructions are for setting up the c
 1. Clone the repository:
    ```bash
    git clone https://github.com/ivanstrike/Pet-Project
-   cd marketplace
+   cd Pet-Project
