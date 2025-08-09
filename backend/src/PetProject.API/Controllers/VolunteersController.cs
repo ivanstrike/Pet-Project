@@ -8,6 +8,7 @@ using PetProject.Application.Volunteers.AddPetFiles;
 using PetProject.Application.Volunteers.CreateVolunteer;
 using PetProject.Application.Volunteers.DeletePetFiles;
 using PetProject.Application.Volunteers.DeleteVolunteer;
+using PetProject.Application.Volunteers.MovePetPosition;
 using PetProject.Application.Volunteers.UpdateMainInfo;
 using PetProject.Application.Volunteers.UpdateRequisites;
 using PetProject.Application.Volunteers.UpdateSocialMedia;
@@ -123,7 +124,7 @@ public class VolunteersController : ControllerBase
 
         return Ok(Envelope.Ok(result.Value));
     }
-    
+
     [HttpPost("{volunteerId:guid}/pet/{petId:guid}/file")]
     public async Task<ActionResult<Guid>> AddPetFiles(
         [FromRoute] Guid volunteerId,
@@ -146,7 +147,7 @@ public class VolunteersController : ControllerBase
 
         return Ok(Envelope.Ok(result.Value));
     }
-    
+
     [HttpDelete("{volunteerId:guid}/pet/{petId:guid}/file")]
     public async Task<ActionResult<Guid>> DeletePetFiles(
         [FromRoute] Guid volunteerId,
@@ -157,6 +158,24 @@ public class VolunteersController : ControllerBase
     {
         var command = request.ToCommand(volunteerId, petId);
 
+        var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return Ok(Envelope.Ok(result.Value));
+    }
+
+    [HttpPut("{volunteerId:guid}/pet/{petId:guid}")]
+    public async Task<ActionResult<Guid>> MovePetPosition(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromBody] MovePetPositionRequest request,
+        [FromServices] MovePetPositionHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
         {

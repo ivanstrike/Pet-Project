@@ -62,7 +62,6 @@ public static class CreateEntities
             birthDate, 
             isVaccinated, 
             helpStatus, 
-            null,
             null).Value;
         return pet;
     }
