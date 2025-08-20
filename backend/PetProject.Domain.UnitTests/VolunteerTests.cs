@@ -64,7 +64,6 @@ public class VolunteerTests
     public void Move_Pet_From_5_To_2_Return_Success_Result()
     {
         //arrange
-        var fromSerialNumber = SerialNumber.Create(5).Value;
         var toSerialNumber = SerialNumber.Create(2).Value;
         var volunteer = CreateEntities.CreateValidVolunteer();
 
@@ -74,8 +73,10 @@ public class VolunteerTests
         foreach (var pet in pets)
             volunteer.AddPet(pet);
 
+        var movedPet = volunteer.Pets.FirstOrDefault(x => x.SerialNumber.Value == 5);
+
         //act
-        var result = volunteer.MovePet(fromSerialNumber, toSerialNumber);
+        var result = volunteer.MovePet(movedPet, toSerialNumber);
 
         //assert
         var expectedSerialNumbers = new[] { 1, 3, 4, 5, 2, 6 };
@@ -89,7 +90,6 @@ public class VolunteerTests
     public void Move_Pet_From_3_To_End_Return_Success_Result()
     {
         //arrange
-        var fromSerialNumber = SerialNumber.Create(3).Value;
         var toSerialNumber = SerialNumber.Create(6).Value;
         var volunteer = CreateEntities.CreateValidVolunteer();
 
@@ -99,8 +99,10 @@ public class VolunteerTests
         foreach (var pet in pets)
             volunteer.AddPet(pet);
 
+        var movedPet = volunteer.Pets.FirstOrDefault(x => x.SerialNumber.Value == 3);
+
         //act
-        var result = volunteer.MovePet(fromSerialNumber, toSerialNumber);
+        var result = volunteer.MovePet(movedPet, toSerialNumber);
 
         //assert
         var expectedSerialNumbers = new[] { 1, 2, 6, 3, 4, 5 };
@@ -114,7 +116,6 @@ public class VolunteerTests
     public void Move_Pet_From_3_To_1_Return_Success_Result()
     {
         //arrange
-        var fromSerialNumber = SerialNumber.Create(3).Value;
         var toSerialNumber = SerialNumber.Create(1).Value;
         var volunteer = CreateEntities.CreateValidVolunteer();
 
@@ -124,8 +125,10 @@ public class VolunteerTests
         foreach (var pet in pets)
             volunteer.AddPet(pet);
 
+        var movedPet = volunteer.Pets.FirstOrDefault(x => x.SerialNumber.Value == 3);
+
         //act
-        var result = volunteer.MovePet(fromSerialNumber, toSerialNumber);
+        var result = volunteer.MovePet(movedPet, toSerialNumber);
 
         //assert
         var expectedSerialNumbers = new[] { 2, 3, 1, 4, 5, 6 };
@@ -139,7 +142,6 @@ public class VolunteerTests
     public void Move_Pet_From_5_To_NonExistentPosition_Return_Success_Result()
     {
         //arrange
-        var fromSerialNumber = SerialNumber.Create(5).Value;
         var toSerialNumber1 = SerialNumber.Create(100).Value;
         var volunteer = CreateEntities.CreateValidVolunteer();
 
@@ -149,8 +151,10 @@ public class VolunteerTests
         foreach (var pet in pets)
             volunteer.AddPet(pet);
 
+        var movedPet = volunteer.Pets.FirstOrDefault(x => x.SerialNumber.Value == 5);
+
         //act
-        var result = volunteer.MovePet(fromSerialNumber, toSerialNumber1);
+        var result = volunteer.MovePet(movedPet, toSerialNumber1);
 
         //assert
         result.IsSuccess.Should().BeFalse();

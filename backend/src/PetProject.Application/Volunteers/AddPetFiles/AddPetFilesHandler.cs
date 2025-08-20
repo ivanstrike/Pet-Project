@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
+using PetProject.Application.Extensions;
 using PetProject.Application.FileProvider;
 using PetProject.Application.Providers;
 using PetProject.Domain.Shared;
@@ -14,17 +16,20 @@ public class AddPetFilesHandler
     private const string BUCKET_NAME = "photos";
     private readonly IUnitOfWork _unitOfWork;
     private readonly IFileProvider _fileProvider;
+    private readonly IValidator<AddPetFilesCommand> _validator;
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly ILogger<AddPetFilesHandler> _logger;
 
     public AddPetFilesHandler(
         IFileProvider fileProvider, 
-        IVolunteersRepository volunteersRepository, 
+        IVolunteersRepository volunteersRepository,
+        IValidator<AddPetFilesCommand> validator,
         IUnitOfWork unitOfWork, 
         ILogger<AddPetFilesHandler> logger)
     {
         _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
+        _validator = validator;
         _unitOfWork = unitOfWork;
         _logger = logger;
     }
@@ -36,7 +41,11 @@ public class AddPetFilesHandler
         using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         try
         {
-            
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToErrorList();
+            }
             var volunteerResult = await _volunteersRepository
                 .GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 

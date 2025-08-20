@@ -16,5 +16,13 @@ public record FilePath
     }
 
     public static Result<FilePath, Error> Create(string path) => new FilePath(path);
-    public static Result<FilePath, Error> Create(Guid path, string extension) => new FilePath(path + extension);
+    public static Result<FilePath, Error> Create(Guid path, string extension)
+    {
+        foreach (var ext in Constants.EXTENSIONS)
+        {
+            if (ext == extension) return new FilePath(path + extension);
+        }
+        
+        return Errors.General.ValueIsInvalid("Extension");
+    }
 }

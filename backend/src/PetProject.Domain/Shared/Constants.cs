@@ -9,4 +9,6 @@ public class Constants
     public const int MAX_PHONE_NUMBER_LENGTH = 15;
         
     public const float MIN_VALUE = 0.0f;
+    
+    public static IEnumerable<string> EXTENSIONS = [".jpg", ".jpeg", ".png"];
 }

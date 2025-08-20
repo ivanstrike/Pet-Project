@@ -6,6 +6,7 @@ using PetProject.Application.Volunteers.AddPetFiles;
 using PetProject.Application.Volunteers.CreateVolunteer;
 using PetProject.Application.Volunteers.DeletePetFiles;
 using PetProject.Application.Volunteers.DeleteVolunteer;
+using PetProject.Application.Volunteers.MovePetPosition;
 using PetProject.Application.Volunteers.UpdateMainInfo;
 using PetProject.Application.Volunteers.UpdateRequisites;
 using PetProject.Application.Volunteers.UpdateSocialMedia;
@@ -27,6 +28,7 @@ public static class Inject
         services.AddScoped<AddPetFilesHandler>();
         services.AddScoped<DeletePetFilesHandler>();
         services.AddScoped<CreateSpeciesHandler>();
+        services.AddScoped<MovePetPositionHandler>();
         
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
         

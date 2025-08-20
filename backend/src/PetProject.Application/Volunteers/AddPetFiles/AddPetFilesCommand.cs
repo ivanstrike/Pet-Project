@@ -5,4 +5,4 @@ namespace PetProject.Application.Volunteers.AddPetFiles;
 public record AddPetFilesCommand(
     Guid VolunteerId,
     Guid PetId,
-    IEnumerable<CreateFileDto> Files);
+    IEnumerable<UploadFileDto> Files);

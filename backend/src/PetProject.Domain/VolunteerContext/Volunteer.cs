@@ -148,24 +148,21 @@ public class Volunteer : Shared.Entity<VolunteerId>
         return Result.Success<Error>();
     }
 
-    public UnitResult<Error> MovePet(SerialNumber fromSerialNumber, SerialNumber toSerialNumber)
+    public UnitResult<Error> MovePet(Pet pet, SerialNumber toSerialNumber)
     {
-        if (fromSerialNumber == toSerialNumber)
+        var currentSerialNumber = pet.SerialNumber;
+        if (currentSerialNumber == toSerialNumber)
             return Result.Success<Error>();
-
-        var movedPet = _pets.FirstOrDefault(x => x.SerialNumber == fromSerialNumber);
-        if (movedPet == null)
-            return Errors.Volunteer.PetNotFound(fromSerialNumber);
         
         if (toSerialNumber.Value < 1 || toSerialNumber.Value > _pets.Count + 1)
             return Errors.General.ValueIsInvalid("SerialNumber");
-        
+
         var sortedPets = _pets.OrderBy(x => x.SerialNumber.Value).ToList();
 
-        sortedPets.Remove(movedPet);
+        sortedPets.Remove(pet);
 
-        sortedPets.Insert(toSerialNumber.Value - 1, movedPet);
-        
+        sortedPets.Insert(toSerialNumber.Value - 1, pet);
+
         for (int i = 0; i < sortedPets.Count; i++)
         {
             sortedPets[i].SetSerialNumber(SerialNumber.Create(i + 1).Value);
