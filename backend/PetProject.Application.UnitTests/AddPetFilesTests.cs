@@ -8,23 +8,30 @@ using Moq;
 using PetProject.Application.Database;
 using PetProject.Application.DTO;
 using PetProject.Application.FileProvider;
+using PetProject.Application.MessageQueues;
 using PetProject.Application.Providers;
 using PetProject.Application.Volunteers.AddPetFiles;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.UnitTests.Extensions;
+using FileInfo = PetProject.Application.FileProvider.FileInfo;
 
 namespace PetProject.Application.UnitTests;
 
 public class AddPetFilesTests
 {
+    private readonly Mock<IFileProvider> _fileProviderMock = new();
+    private readonly Mock<IVolunteersRepository> _volunteersRepositoryMock = new();
+    private readonly Mock<IDbTransaction> _transactionMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<ILogger<AddPetFilesHandler>> _loggerMock = new();
+    private readonly Mock<IValidator<AddPetFilesCommand>> _validatorMock = new();
+    private readonly Mock<IMessageQueue<IEnumerable<FileInfo>>> _messageQueueMock = new();
+    
     [Fact]
     public async Task Handle_Should_Upload_Files_To_Pet()
     {
         //arrange
-        var logger = LoggerFactory.Create(builder => builder.AddConsole())
-            .CreateLogger<AddPetFilesHandler>();
-        
         var cancellationToken = new CancellationTokenSource().Token;
         var voluteer = CreateEntities.CreateValidVolunteer();
 
@@ -46,35 +53,31 @@ public class AddPetFilesTests
             FilePath.Create(fileName).Value
         ];
         
-        var fileProviderMock = new Mock<IFileProvider>();
-        fileProviderMock
+        _fileProviderMock
             .Setup(v => v.UploadFiles(It.IsAny<IEnumerable<UploadFileData>>(), cancellationToken))
             .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
             
-        var volunteersRepositoryMock = new Mock<IVolunteersRepository>();
-        volunteersRepositoryMock.Setup(v => v.GetById(voluteer.Id, cancellationToken))
+        _volunteersRepositoryMock.Setup(v => v.GetById(voluteer.Id, cancellationToken))
             .ReturnsAsync(voluteer);
 
-        var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
-        validatorMock.Setup(v => v.ValidateAsync(command, cancellationToken))
+        _validatorMock.Setup(v => v.ValidateAsync(command, cancellationToken))
             .ReturnsAsync(new ValidationResult());
         
-        var transactionMock = new Mock<IDbTransaction>();
-        transactionMock.Setup(t => t.Commit()).Verifiable();
-        transactionMock.Setup(t => t.Rollback()).Verifiable();
+        _transactionMock.Setup(t => t.Commit()).Verifiable();
+        _transactionMock.Setup(t => t.Rollback()).Verifiable();
 
-        var unitOfWorkMock = new Mock<IUnitOfWork>();
-        unitOfWorkMock.Setup(u => u.SaveChanges(cancellationToken))
+        _unitOfWorkMock.Setup(u => u.SaveChanges(cancellationToken))
             .Returns(Task.CompletedTask);
-        unitOfWorkMock.Setup(u => u.BeginTransaction(cancellationToken))
-            .ReturnsAsync(transactionMock.Object);
+        _unitOfWorkMock.Setup(u => u.BeginTransaction(cancellationToken))
+            .ReturnsAsync(_transactionMock.Object);
         
         var handler = new AddPetFilesHandler(
-            fileProviderMock.Object,
-            volunteersRepositoryMock.Object,
-            validatorMock.Object,
-            unitOfWorkMock.Object,
-            logger
+            _fileProviderMock.Object,
+            _volunteersRepositoryMock.Object,
+            _validatorMock.Object,
+            _unitOfWorkMock.Object,
+            _messageQueueMock.Object,
+            _loggerMock.Object
             );
 
         //act
