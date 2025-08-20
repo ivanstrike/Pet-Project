@@ -2,4 +2,4 @@
 
 namespace PetProject.Application.FileProvider;
 
-public record UploadFileData(Stream Stream, FilePath FilePath, string BucketName);
+public record FileInfo(FilePath FilePath, string BucketName);

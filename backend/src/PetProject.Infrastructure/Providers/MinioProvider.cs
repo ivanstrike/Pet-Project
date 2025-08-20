@@ -8,6 +8,7 @@ using PetProject.Domain;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.Infrastructure.Options;
+using FileInfo = PetProject.Application.FileProvider.FileInfo;
 
 namespace PetProject.Infrastructure.Providers;
 
@@ -24,7 +25,7 @@ public class MinioProvider : IFileProvider
         _logger = logger;
         _minioClient = minioClient;
     }
-    
+
 /*
     public async Task<Result<string, Error>> GetFile(
         FileData uploadFileData,
@@ -47,25 +48,32 @@ public class MinioProvider : IFileProvider
     }
 */
 
-    public async Task<UnitResult<Error>> DeleteFiles(
-        IEnumerable<FileData> deleteFilesData,
+    public async Task<UnitResult<Error>> DeleteFile(
+        FileInfo deleteFileInfo,
         CancellationToken cancellationToken = default)
     {
         try
         {
-            foreach (var fileData in deleteFilesData)
-            {
-                RemoveObjectArgs rmArgs = new RemoveObjectArgs()
-                    .WithBucket(fileData.BucketName)
-                    .WithObject(fileData.ObjectName);
-                await _minioClient.RemoveObjectAsync(rmArgs);
-            }
+            var statArgs = new StatObjectArgs()
+                .WithBucket(deleteFileInfo.BucketName)
+                .WithObject(deleteFileInfo.ObjectName);
             
-            return UnitResult.Success<Error>();
+            var objectStat = await _minioClient.StatObjectAsync(statArgs, cancellationToken);
+            if (objectStat is null)
+                return Result.Success<Error>();
+            
+            RemoveObjectArgs rmArgs = new RemoveObjectArgs()
+                .WithBucket(deleteFileInfo.BucketName)
+                .WithObject(deleteFileInfo.ObjectName);
+            await _minioClient.RemoveObjectAsync(rmArgs, cancellationToken);
+            
+            return Result.Success<Error>();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Fail to delete file from minio");
+            _logger.LogError(e, "Fail to delete file {name} from minio bucket {bucket}", 
+                deleteFileInfo.ObjectName, 
+                deleteFileInfo.BucketName);
             return Error.Failure("file.delete", "Fail to delete file from minio");
         }
     }

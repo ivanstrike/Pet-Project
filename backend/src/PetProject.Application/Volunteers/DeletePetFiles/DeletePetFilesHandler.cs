@@ -8,6 +8,7 @@ using PetProject.Application.Providers;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.Domain.VolunteerContext.VolunteerVO;
+using FileInfo = PetProject.Application.FileProvider.FileInfo;
 
 namespace PetProject.Application.Volunteers.DeletePetFiles;
 
@@ -57,14 +58,14 @@ public class DeletePetFilesHandler
             if (petResult is null)
                 return Errors.General.NotFound(command.PetId).ToErrorList();
 
-            List<FileData> deleteFilesData = [];
+            List<FileInfo> deleteFilesData = [];
 
             List<PetFile> petFiles = [];
 
             foreach (var file in petResult.Files)
             {
                 if (command.FileNames.Contains(file.PathToStorage.Value))
-                    deleteFilesData.Add(new FileData(file.PathToStorage.Value, BUCKET_NAME));
+                    deleteFilesData.Add(new FileInfo(file.PathToStorage, BUCKET_NAME));
                 else
                     petFiles.Add(file);
             }
@@ -73,10 +74,13 @@ public class DeletePetFilesHandler
 
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            var deleteResult = await _fileProvider.DeleteFiles(deleteFilesData, cancellationToken);
-            if (deleteResult.IsFailure)
-                return deleteResult.Error.ToErrorList();
-
+            foreach (var deleteFileData in deleteFilesData)
+            {
+                var deleteResult = await _fileProvider.DeleteFile(deleteFileData, cancellationToken);
+                if (deleteResult.IsFailure)
+                    return deleteResult.Error.ToErrorList();
+            }
+            
             transaction.Commit();
 
             return petResult.Id.Value;
