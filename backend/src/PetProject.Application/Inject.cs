@@ -11,7 +11,6 @@ using PetProject.Application.Volunteers.UpdateMainInfo;
 using PetProject.Application.Volunteers.UpdateRequisites;
 using PetProject.Application.Volunteers.UpdateSocialMedia;
 
-
 namespace PetProject.Application;
 
 public static class Inject

@@ -1,6 +1,4 @@
 using FluentAssertions;
-using PetProject.Domain;
-using PetProject.Domain.Shared.Value_Objects;
 using PetProject.Domain.VolunteerContext;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.UnitTests.Extensions;

@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using PetProject.API.Extensions;
-using PetProject.API.Response;
+﻿using PetProject.API.Response;
 using PetProject.Domain.Shared;
 
 namespace PetProject.API.Middlewares;

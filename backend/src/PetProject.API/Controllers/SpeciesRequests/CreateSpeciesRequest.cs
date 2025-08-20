@@ -1,5 +1,4 @@
-﻿using PetProject.Application.DTO;
-using PetProject.Application.SpeciesHandlers.CreateSpecies;
+﻿using PetProject.Application.SpeciesHandlers.CreateSpecies;
 
 namespace PetProject.API.Controllers.SpeciesRequests;
 

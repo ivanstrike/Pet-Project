@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using PetProject.Application.Validation;
-using PetProject.Application.Volunteers.UpdateSocialMedia;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.Value_Objects;
 

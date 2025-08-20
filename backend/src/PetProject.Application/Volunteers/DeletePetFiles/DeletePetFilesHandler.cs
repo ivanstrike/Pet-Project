@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
 using PetProject.Application.Extensions;
-using PetProject.Application.FileProvider;
 using PetProject.Application.Providers;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;

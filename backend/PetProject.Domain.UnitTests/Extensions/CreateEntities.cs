@@ -1,5 +1,4 @@
-﻿using PetProject.Domain;
-using PetProject.Domain.Shared.Value_Objects;
+﻿using PetProject.Domain.Shared.Value_Objects;
 using PetProject.Domain.SpeciesContext.SpeciesVO;
 using PetProject.Domain.VolunteerContext;
 using PetProject.Domain.VolunteerContext.PetVO;

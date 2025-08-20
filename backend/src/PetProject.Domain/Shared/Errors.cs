@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using CSharpFunctionalExtensions;
-using PetProject.Domain.VolunteerContext.PetVO;
+﻿using PetProject.Domain.VolunteerContext.PetVO;
 
 namespace PetProject.Domain.Shared;
 
