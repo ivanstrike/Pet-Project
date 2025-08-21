@@ -7,9 +7,9 @@ public class InMemoryMessageQueue<TMessage>: IMessageQueue<TMessage>
 {
     private readonly Channel<TMessage> _channel;
     
-    public InMemoryMessageQueue(Channel<TMessage> channel)
+    public InMemoryMessageQueue()
     {
-        _channel = channel;
+        _channel = Channel.CreateUnbounded<TMessage>();
     }
     public async Task WriteAsync(TMessage paths, CancellationToken cancellationToken = default)
     {

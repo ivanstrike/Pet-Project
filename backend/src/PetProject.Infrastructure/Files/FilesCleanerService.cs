@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using PetProject.Application.Files;
 using PetProject.Application.MessageQueues;
 using PetProject.Application.Providers;
-using FileInfo = PetProject.Application.FileProvider.FileInfo;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
-namespace PetProject.Infrastructure.BackgroundServices;
+namespace PetProject.Infrastructure.Files;
 
 public class FilesCleanerService : IFilesCleanerService
 {
@@ -11,8 +11,7 @@ public class FilesCleanerService : IFilesCleanerService
     private readonly IFileProvider _fileProvider;
 
     public FilesCleanerService(IFileProvider fileProvider,
-        IMessageQueue<IEnumerable<FileInfo>> messageQueue,
-        ILogger<FilesCleanerService> logger)
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue)
     {
         _fileProvider = fileProvider;
         _messageQueue = messageQueue;

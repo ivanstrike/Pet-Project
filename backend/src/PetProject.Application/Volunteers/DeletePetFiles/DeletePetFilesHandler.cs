@@ -7,7 +7,7 @@ using PetProject.Application.Providers;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.Domain.VolunteerContext.VolunteerVO;
-using FileInfo = PetProject.Application.FileProvider.FileInfo;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Application.Volunteers.DeletePetFiles;
 

@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using PetProject.Application.FileProvider;
+using PetProject.Application.Files;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
-using FileInfo = PetProject.Application.FileProvider.FileInfo;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Application.Providers;
 

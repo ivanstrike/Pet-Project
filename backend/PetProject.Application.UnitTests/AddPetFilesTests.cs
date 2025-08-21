@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PetProject.Application.Database;
 using PetProject.Application.DTO;
-using PetProject.Application.FileProvider;
+using PetProject.Application.Files;
 using PetProject.Application.MessageQueues;
 using PetProject.Application.Providers;
 using PetProject.Application.Volunteers.AddPetFiles;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.UnitTests.Extensions;
-using FileInfo = PetProject.Application.FileProvider.FileInfo;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Application.UnitTests;
 

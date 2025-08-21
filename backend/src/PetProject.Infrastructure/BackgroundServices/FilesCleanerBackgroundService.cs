@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PetProject.Application.Files;
 
 namespace PetProject.Infrastructure.BackgroundServices;
 
