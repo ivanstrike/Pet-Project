@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetProject.Domain;
 using PetProject.Domain.Shared;
 using PetProject.Domain.SpeciesContext.SpeciesVO;
 using PetProject.Domain.VolunteerContext;

@@ -1,6 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Response;
 using PetProject.Domain.Shared;
 

@@ -3,11 +3,13 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Database;
 using PetProject.Application.Extensions;
-using PetProject.Application.FileProvider;
+using PetProject.Application.Files;
+using PetProject.Application.MessageQueues;
 using PetProject.Application.Providers;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
 using PetProject.Domain.VolunteerContext.VolunteerVO;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Application.Volunteers.AddPetFiles;
 
@@ -15,9 +17,11 @@ public class AddPetFilesHandler
 {
     private const string BUCKET_NAME = "photos";
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly IFileProvider _fileProvider;
     private readonly IValidator<AddPetFilesCommand> _validator;
     private readonly IVolunteersRepository _volunteersRepository;
+    
     private readonly ILogger<AddPetFilesHandler> _logger;
 
     public AddPetFilesHandler(
@@ -25,12 +29,14 @@ public class AddPetFilesHandler
         IVolunteersRepository volunteersRepository,
         IValidator<AddPetFilesCommand> validator,
         IUnitOfWork unitOfWork, 
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue,
         ILogger<AddPetFilesHandler> logger)
     {
         _fileProvider = fileProvider;
         _volunteersRepository = volunteersRepository;
         _validator = validator;
         _unitOfWork = unitOfWork;
+        _messageQueue = messageQueue;
         _logger = logger;
     }
 
@@ -66,23 +72,25 @@ public class AddPetFilesHandler
                 if (filePath.IsFailure)
                     return filePath.Error.ToErrorList();
 
-                var fileData = new UploadFileData(file.Content, filePath.Value, BUCKET_NAME);
+                var fileData = new UploadFileData(file.Content, new FileInfo(filePath.Value, BUCKET_NAME) );
                 uploadFilesData.Add(fileData);
             }
 
             var petFiles = uploadFilesData
-                .Select(f => f.FilePath)
+                .Select(f => f.FileInfo.FilePath)
                 .Select(f => new PetFile(f))
                 .ToList();
-
-            petResult.UpdateFiles(petFiles);
-            
-            await _unitOfWork.SaveChanges(cancellationToken);
             
             var uploadResult = await _fileProvider.UploadFiles(uploadFilesData, cancellationToken);
             if (uploadResult.IsFailure)
+            {
+                await _messageQueue.WriteAsync(uploadFilesData.Select(f => f.FileInfo),  cancellationToken);
                 return uploadResult.Error.ToErrorList();
-
+            }
+            
+            petResult.UpdateFiles(petFiles);
+            
+            await _unitOfWork.SaveChanges(cancellationToken);
             transaction.Commit ();
             
             return petResult.Id.Value;

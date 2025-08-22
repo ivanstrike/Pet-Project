@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetProject.Domain.Shared.Value_Objects;
 
 namespace PetProject.Infrastructure.Extensions;
 

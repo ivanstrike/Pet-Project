@@ -2,12 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
-using PetProject.Application.FileProvider;
+using PetProject.Application.Files;
 using PetProject.Application.Providers;
-using PetProject.Domain;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
-using PetProject.Infrastructure.Options;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Infrastructure.Providers;
 
@@ -24,7 +23,7 @@ public class MinioProvider : IFileProvider
         _logger = logger;
         _minioClient = minioClient;
     }
-    
+
 /*
     public async Task<Result<string, Error>> GetFile(
         FileData uploadFileData,
@@ -47,25 +46,32 @@ public class MinioProvider : IFileProvider
     }
 */
 
-    public async Task<UnitResult<Error>> DeleteFiles(
-        IEnumerable<FileData> deleteFilesData,
+    public async Task<UnitResult<Error>> DeleteFile(
+        FileInfo deleteFileInfo,
         CancellationToken cancellationToken = default)
     {
         try
         {
-            foreach (var fileData in deleteFilesData)
-            {
-                RemoveObjectArgs rmArgs = new RemoveObjectArgs()
-                    .WithBucket(fileData.BucketName)
-                    .WithObject(fileData.ObjectName);
-                await _minioClient.RemoveObjectAsync(rmArgs);
-            }
-            
-            return UnitResult.Success<Error>();
+            var statArgs = new StatObjectArgs()
+                .WithBucket(deleteFileInfo.BucketName)
+                .WithObject(deleteFileInfo.FilePath.Value);
+
+            var objectStat = await _minioClient.StatObjectAsync(statArgs, cancellationToken);
+            if (objectStat is null)
+                return Result.Success<Error>();
+
+            RemoveObjectArgs rmArgs = new RemoveObjectArgs()
+                .WithBucket(deleteFileInfo.BucketName)
+                .WithObject(deleteFileInfo.FilePath.Value);
+            await _minioClient.RemoveObjectAsync(rmArgs, cancellationToken);
+
+            return Result.Success<Error>();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Fail to delete file from minio");
+            _logger.LogError(e, "Fail to delete file {name} from minio bucket {bucket}",
+                deleteFileInfo.FilePath.Value,
+                deleteFileInfo.BucketName);
             return Error.Failure("file.delete", "Fail to delete file from minio");
         }
     }
@@ -107,21 +113,21 @@ public class MinioProvider : IFileProvider
         await semaphoreSlim.WaitAsync(cancellationToken);
 
         var putObjectArgs = new PutObjectArgs()
-            .WithBucket(uploadFileData.BucketName)
+            .WithBucket(uploadFileData.FileInfo.BucketName)
             .WithStreamData(uploadFileData.Stream)
             .WithObjectSize(uploadFileData.Stream.Length)
-            .WithObject(uploadFileData.FilePath.Value);
+            .WithObject(uploadFileData.FileInfo.FilePath.Value);
         try
         {
-            _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
-            return uploadFileData.FilePath;
+            await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
+            return uploadFileData.FileInfo.FilePath;
         }
         catch (Exception e)
         {
             _logger.LogError(e,
                 "Error while trying to upload in minio file with path {path} in bucket {bucket}",
-                uploadFileData.FilePath,
-                uploadFileData.BucketName);
+                uploadFileData.FileInfo.FilePath.Value,
+                uploadFileData.FileInfo.BucketName);
             return Error.Failure("file.upload", "Error while trying to upload in minio");
         }
         finally
@@ -134,17 +140,17 @@ public class MinioProvider : IFileProvider
         IEnumerable<UploadFileData> filesData,
         CancellationToken cancellationToken = default)
     {
-        var bucketNames = filesData.Select(x => x.BucketName).ToHashSet();
+        var bucketNames = filesData.Select(x => x.FileInfo.BucketName).ToHashSet();
         foreach (var bucket in bucketNames)
         {
             var bucketExistsArgs = new BucketExistsArgs()
                 .WithBucket(bucket);
-            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistsArgs);
+            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
             if (!bucketExist)
             {
                 var makeBucketArgs = new MakeBucketArgs()
                     .WithBucket(bucket);
-                await _minioClient.MakeBucketAsync(makeBucketArgs);
+                await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
             }
         }
     }

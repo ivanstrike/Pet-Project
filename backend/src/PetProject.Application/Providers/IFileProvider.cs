@@ -1,7 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using PetProject.Application.FileProvider;
+using PetProject.Application.Files;
 using PetProject.Domain.Shared;
 using PetProject.Domain.VolunteerContext.PetVO;
+using FileInfo = PetProject.Application.Files.FileInfo;
 
 namespace PetProject.Application.Providers;
 
@@ -12,8 +13,8 @@ public interface IFileProvider
         FileData uploadFileData,
         CancellationToken cancellationToken = default);
 */
-    Task<UnitResult<Error>> DeleteFiles(
-        IEnumerable<FileData> deleteFilesData,
+    Task<UnitResult<Error>> DeleteFile(
+        FileInfo deleteFileInfo,
         CancellationToken cancellationToken = default);
 
     Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
